@@ -16,6 +16,6 @@ public class Utilisateur {
     private String genre;
     private String password;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Note> noteList;
+    private List<Note> note;
 
 }

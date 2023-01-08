@@ -10,5 +10,7 @@ public class ListePostulant {
     private Long id;
     private String ListeNom;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Postulant> listePostulants;
+    private List<Postulant> Postulant;
+    @OneToOne
+    private Entretien entretien;
 }

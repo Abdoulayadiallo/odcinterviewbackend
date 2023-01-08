@@ -10,7 +10,7 @@ public class Questionnaire {
     private Long id;
     private String questionnaireNom;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Question> questionList;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Critere> critereList;
+    private List<Question> question;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Critere> critere;
 }
