@@ -1,9 +1,13 @@
 package com.odk.odcinterview.Model;
 
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-
+@Data
+@RequiredArgsConstructor
 @Entity
 public class Entretien {
     @Id
@@ -13,8 +17,8 @@ public class Entretien {
     private Date dateDebut;
     private Date dateFin;
     private String nombreParticipant;
-    @OneToOne
-    @JoinColumn(name = "questionnaire_id")
-    private Questionnaire questionnaire;
-
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Critere> critereList;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Participant> participants;
 }

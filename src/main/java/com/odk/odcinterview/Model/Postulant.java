@@ -1,8 +1,12 @@
 package com.odk.odcinterview.Model;
 
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
-
+@Data
+@RequiredArgsConstructor
 @Entity
 public class Postulant {
     @Id
@@ -12,8 +16,16 @@ public class Postulant {
     private String prenom;
     private String email;
     private String numero;
-    private String numeroMTCL;
     private String genre;
-    private String status;
+    private String numeroMTCL;
+    private String resultatFinal;
+    private String noteFinal;
+    private int rang;
+    private String decisionFinal;
+    private String commentaireFinal;
+    @OneToOne
+    @JoinColumn(name = "participant_id")
+    private Participant participant;
+
 
 }
