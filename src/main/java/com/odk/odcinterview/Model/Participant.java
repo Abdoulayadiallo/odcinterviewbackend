@@ -23,11 +23,6 @@ public class Participant {
             joinColumns = @JoinColumn(name = "participant_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "id"))
     private Collection<Notification> notifications;
-    @ManyToMany
-    @JoinTable(name = "Participant_note",
-            joinColumns = @JoinColumn(name = "participant_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "note_id", referencedColumnName = "id"))
-    private Collection<Note> notes;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Utilisateur> utilisateurs;
 }

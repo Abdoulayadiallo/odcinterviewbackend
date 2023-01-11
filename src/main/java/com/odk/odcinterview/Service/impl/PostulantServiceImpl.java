@@ -7,6 +7,7 @@ import com.odk.odcinterview.Repository.PostulantRepository;
 import com.odk.odcinterview.Service.ParticipantService;
 import com.odk.odcinterview.Service.PostulantService;
 import com.odk.odcinterview.util.ExcelHelper;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,12 +17,9 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class PostulantServiceImpl implements PostulantService {
     private final PostulantRepository postulantRepository;
-
-    public PostulantServiceImpl(PostulantRepository postulantRepository) {
-        this.postulantRepository = postulantRepository;
-    }
 
     @Override
     public Postulant savePostulant(Postulant postulant) {
@@ -30,7 +28,13 @@ public class PostulantServiceImpl implements PostulantService {
 
     @Override
     public Postulant updatePostulant(Postulant postulant, Long id) {
-        return null;
+        Postulant postulant1 = postulantRepository.findPostulantById(id);
+        postulant1.setNumero(postulant.getNumero());
+        postulant1.setNom(postulant.getNom());
+        postulant1.setPrenom(postulant.getPrenom());
+        postulant1.setEmail(postulant.getEmail());
+        postulant1.setGenre(postulant.getGenre());
+        return postulantRepository.save(postulant);
     }
 
     @Override
@@ -40,12 +44,12 @@ public class PostulantServiceImpl implements PostulantService {
 
     @Override
     public List<Postulant> readPostulants() {
-        return null;
+        return postulantRepository.findAll();
     }
 
     @Override
     public Postulant readPostulantByid(Long id) {
-        return null;
+        return postulantRepository.findPostulantById(id);
     }
 
     @Override
