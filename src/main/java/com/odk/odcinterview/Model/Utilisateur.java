@@ -1,6 +1,8 @@
 package com.odk.odcinterview.Model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
@@ -9,7 +11,8 @@ import java.util.List;
 
 @Entity
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +30,17 @@ public class Utilisateur {
     @OneToOne
     @JoinColumn(name = "participant_id")
     private Participant participant;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     Role role;
 
+    public Utilisateur(Long id, String image, String nom, String prenom, String email,String numero,String genre,String password) {
+        this.id=id;
+        this.image=image;
+        this.nom=nom;
+        this.prenom=prenom;
+        this.email=email;
+        this.numero=numero;
+        this.genre=genre;
+        this.password=password;
+    }
 }

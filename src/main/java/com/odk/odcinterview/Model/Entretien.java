@@ -16,6 +16,7 @@ public class Entretien {
     private String entretienNom;
     private Date dateDebut;
     private Date dateFin;
+    private Date dateCreation;
     private String nombreParticipant;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Critere> critereList;

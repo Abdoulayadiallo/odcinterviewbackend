@@ -16,7 +16,8 @@ public class Participant {
     private String nom;
     private String prenom;
     private String email;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Estatus status;
     @ManyToMany
     @JoinTable(name = "Participant_notification",
             joinColumns = @JoinColumn(name = "participant_id", referencedColumnName = "id"),

@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface AccountService {
     Utilisateur saveUser(String nom,String prenom, String email,String numero, String genre);
+    Utilisateur saveAdmin(Utilisateur utilisateur);
     Role saveRole(Role role);
     public void updateUserPassword(Utilisateur utilisateur, String newpassword);
 

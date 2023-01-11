@@ -33,7 +33,7 @@ public class EmailConstructor {
 				MimeMessageHelper email = new MimeMessageHelper(mimeMessage);
 				email.setPriority(1);
 				email.setTo(utilisateur.getEmail());
-				email.setSubject("Bienvenu sur Malitourist");
+				email.setSubject("Bienvenu sur ODC Interview");
 				email.setText(text, true);
 				email.setFrom(new InternetAddress(env.getProperty("support.email")));
 			}
@@ -52,7 +52,7 @@ public class EmailConstructor {
 				MimeMessageHelper email = new MimeMessageHelper(mimeMessage);
 				email.setPriority(1);
 				email.setTo(utilisateur.getEmail());
-				email.setSubject("Nouveau mots de passe - Malitourist");
+				email.setSubject("Nouveau mots de passe - ODC interview");
 				email.setText(text, true);
 				email.setFrom(new InternetAddress(env.getProperty("support.email")));
 			}
@@ -70,7 +70,7 @@ public class EmailConstructor {
 				MimeMessageHelper email = new MimeMessageHelper(mimeMessage);
 				email.setPriority(1);
 				email.setTo(utilisateur.getEmail());
-				email.setSubject("Profile Modifié - Malitourist");
+				email.setSubject("Profile Modifié - ODC interview");
 				email.setText(text, true);
 				email.setFrom(new InternetAddress(env.getProperty("support.email")));
 			}

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 @Data
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class Postulant {
     private int rang;
     private String decisionFinal;
     private String commentaireFinal;
+    private Date dateCreation;
     @OneToOne
     @JoinColumn(name = "participant_id")
     private Participant participant;

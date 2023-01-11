@@ -14,8 +14,14 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
     private Erole roleName;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Utilisateur> utilisateurs;
+
+    public Role(Long ic, Erole roleName) {
+        this.id=id;
+        this.roleName=roleName;
+    }
 }
