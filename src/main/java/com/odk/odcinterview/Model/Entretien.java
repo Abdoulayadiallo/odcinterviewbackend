@@ -1,5 +1,6 @@
 package com.odk.odcinterview.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

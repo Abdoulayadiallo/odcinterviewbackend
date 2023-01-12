@@ -47,7 +47,7 @@ public class AccountController {
             Utilisateur utilisateur = accountService.saveUser(nom, prenom, email,numero,genre);
             return new ResponseEntity<>(utilisateur, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Une erreur est survenue à l'incription", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Une erreur est survenue lors de l'incription", HttpStatus.BAD_REQUEST);
         }
 
     }

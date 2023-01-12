@@ -43,4 +43,9 @@ public class QuestionServiceImpl implements QuestionService {
     public Question readQuestionByid(Long id) {
         return questionRepository.findQuestionById(id);
     }
+
+    @Override
+    public boolean existQuestionBynom(String nom) {
+        return questionRepository.existsQuestionByQuestionNom(nom);
+    }
 }

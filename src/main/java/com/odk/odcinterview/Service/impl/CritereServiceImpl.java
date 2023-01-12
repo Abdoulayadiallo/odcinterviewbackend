@@ -7,6 +7,7 @@ import com.odk.odcinterview.Repository.QuestionRepository;
 import com.odk.odcinterview.Service.CritereService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,7 +24,9 @@ public class CritereServiceImpl implements CritereService {
     @Override
     public Critere saveCritere(Critere critere,Long questionId) {
         Question question = questionRepository.findQuestionById(questionId);
-        critere.setQuestionList((List<Question>) question);
+        List<Question> questionList= new ArrayList<>();
+        questionList.add(question);
+        critere.setQuestionList(questionList);
         return critereRepository.save(critere);
     }
 

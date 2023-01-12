@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -34,7 +35,7 @@ public class PostulantServiceImpl implements PostulantService {
         postulant1.setPrenom(postulant.getPrenom());
         postulant1.setEmail(postulant.getEmail());
         postulant1.setGenre(postulant.getGenre());
-        return postulantRepository.save(postulant);
+        return postulantRepository.save(postulant1);
     }
 
     @Override
@@ -60,5 +61,12 @@ public class PostulantServiceImpl implements PostulantService {
         }catch (IOException e){
             throw new RuntimeException("Echec du stockage de données excels",e);
         }
+    }
+
+    @Override
+    public ByteArrayInputStream ExportPostulant() {
+        List<Postulant> postulants = postulantRepository.findAll();
+        ByteArrayInputStream inputStream = ExcelHelper.postulantsToExcel(postulants);
+        return inputStream;
     }
 }

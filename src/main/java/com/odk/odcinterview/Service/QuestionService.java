@@ -10,4 +10,6 @@ public interface QuestionService {
     void deleteQuestion(Question question);
     List<Question> readQuestions();
     Question readQuestionByid(Long id);
+
+    boolean existQuestionBynom(String nom);
 }

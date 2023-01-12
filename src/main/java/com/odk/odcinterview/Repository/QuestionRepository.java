@@ -15,4 +15,6 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
 
     Question findQuestionById(Long id);
     Question findQuestionByQuestionNom(String nom);
+
+    Boolean existsQuestionByQuestionNom(String string);
 }

@@ -4,6 +4,7 @@ import com.odk.odcinterview.Model.Participant;
 import com.odk.odcinterview.Model.Postulant;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public interface PostulantService {
@@ -14,6 +15,9 @@ public interface PostulantService {
     Postulant readPostulantByid(Long id);
 
     void ImportPostulant(MultipartFile multipartFile);
+
+    ByteArrayInputStream ExportPostulant();
+
 
 
 }

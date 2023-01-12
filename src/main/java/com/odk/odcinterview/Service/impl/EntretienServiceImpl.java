@@ -5,26 +5,26 @@ import com.odk.odcinterview.Model.Entretien;
 import com.odk.odcinterview.Repository.CritereRepository;
 import com.odk.odcinterview.Repository.EntretienRepository;
 import com.odk.odcinterview.Service.EntretienService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class EntretienServiceImpl implements EntretienService {
     private final EntretienRepository entretienRepository;
     private final CritereRepository critereRepository;
 
-    public EntretienServiceImpl(EntretienRepository entretienRepository,
-                                CritereRepository critereRepository) {
-        this.entretienRepository = entretienRepository;
-        this.critereRepository = critereRepository;
-    }
 
     @Override
     public Entretien saveEntretien(Entretien entretien, Long idCritere) {
         Critere critere = critereRepository.findCritereById(idCritere);
-        entretien.setCritereList((List<Critere>) critere);
+        List<Critere> critereList = new ArrayList<>();
+        critereList.add(critere);
+        entretien.setCritereList(critereList);
         Date date = new Date();
         entretien.setDateCreation(date);
         return entretienRepository.save(entretien);
@@ -35,7 +35,7 @@ public class EntretienServiceImpl implements EntretienService {
         Entretien entretien1= entretienRepository.findEntretienById(id);
         entretien1.setEntretienNom(entretien.getEntretienNom());
         entretien1.setNombreParticipant(entretien.getNombreParticipant());
-        return null;
+        return entretienRepository.save(entretien1);
     }
 
     @Override

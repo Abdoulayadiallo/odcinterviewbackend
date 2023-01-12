@@ -7,6 +7,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ public class ExcelHelper {
 
         return true;
     }
+    //Une methode permettant de importer les postulants de fichier excel dans la table Postulant
 
     public static List<Postulant> excelToPostulants(InputStream is) {
         try {
@@ -93,6 +96,46 @@ public class ExcelHelper {
             return postulants;
         } catch (IOException e) {
             throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
+        }
+    }
+
+    //Une methode permettant de exporter les postulants de base en fichier excel
+    public static ByteArrayInputStream postulantsToExcel(List<Postulant> postulants) {
+
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+            Sheet sheet = workbook.createSheet(SHEET);
+
+            // Header
+            Row headerRow = sheet.createRow(0);
+
+            for (int col = 0; col < HEADERs.length; col++) {
+                Cell cell = headerRow.createCell(col);
+                cell.setCellValue(HEADERs[col]);
+            }
+
+            int rowIdx = 1;
+            for (Postulant postulant : postulants) {
+                Row row = sheet.createRow(rowIdx++);
+
+                row.createCell(0).setCellValue(postulant.getId());
+                row.createCell(1).setCellValue(postulant.getNom());
+                row.createCell(2).setCellValue(postulant.getPrenom());
+                row.createCell(3).setCellValue(postulant.getEmail());
+                row.createCell(4).setCellValue(postulant.getNumero());
+                row.createCell(5).setCellValue(postulant.getGenre());
+                row.createCell(6).setCellValue(postulant.getDecisionFinal());
+                row.createCell(7).setCellValue(postulant.getNoteFinal());
+                row.createCell(8).setCellValue(postulant.getRang());
+                row.createCell(9).setCellValue(postulant.getNumeroMTCL());
+                row.createCell(10).setCellValue(postulant.getResultatFinal());
+
+
+            }
+
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
         }
     }
 }
