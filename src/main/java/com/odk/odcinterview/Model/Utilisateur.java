@@ -1,5 +1,6 @@
 package com.odk.odcinterview.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,14 +21,18 @@ public class Utilisateur {
     private String image;
     private String nom;
     private String prenom;
+    @Column(unique = true,nullable = false)
     private String email;
+    @Column(unique = true,nullable = false)
     private String username;
     private String numero;
     private String genre;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    @Column(columnDefinition = "text")
     private String bio;
     private Date dateCreation;
-    @OneToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "participant_id")
     private Participant participant;
     @ManyToOne(fetch = FetchType.EAGER)

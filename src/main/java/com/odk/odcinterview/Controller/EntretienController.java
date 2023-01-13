@@ -35,7 +35,7 @@ public class EntretienController {
     public ResponseEntity<?> getEntretienInfo(@PathVariable Long id) {
         Entretien entretien= entretienService.readEntretienByid(id);
         if (entretien == null) {
-            return new ResponseEntity<>("Entretien n existe pas.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Cet entretien n existe pas.", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(entretien, HttpStatus.OK);
     }

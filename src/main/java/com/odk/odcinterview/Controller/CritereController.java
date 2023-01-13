@@ -28,7 +28,7 @@ public class CritereController {
     public ResponseEntity<?> getCritereInfo(@PathVariable Long id) {
         Critere critere= critereService.readCritereByid(id);
         if (critere == null) {
-            return new ResponseEntity<>("Critere n existe pas.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Ce critere n existe pas.", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(critere, HttpStatus.OK);
     }

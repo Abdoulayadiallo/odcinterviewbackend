@@ -25,7 +25,7 @@ public class Postulant {
     private String decisionFinal;
     private String commentaireFinal;
     private Date dateCreation;
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "participant_id")
     private Participant participant;
 

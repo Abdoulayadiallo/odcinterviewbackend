@@ -1,11 +1,14 @@
 package com.odk.odcinterview.Controller;
 
+import com.odk.odcinterview.Model.Entretien;
 import com.odk.odcinterview.Model.Postulant;
+import com.odk.odcinterview.Payload.PostulantResponse;
 import com.odk.odcinterview.Service.*;
 import com.odk.odcinterview.util.ExcelHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,11 +34,15 @@ public class PostulantController {
     PostulantService postulantService;
 
 
-    @PostMapping("/upload")
-    public ResponseEntity<?> uplodPostlulant(@RequestParam("file") MultipartFile file) {
+    @PostMapping("/upload/{idEntretien}")
+    public ResponseEntity<?> uplodPostlulant(@PathVariable Long idEntretien,@RequestParam("file") MultipartFile file) {
 
+        Entretien entretien= entretienService.readEntretienByid(idEntretien);
+        if (entretien == null) {
+            return new ResponseEntity<>("Cet entretien n existe pas.", HttpStatus.NOT_FOUND);
+        }
         if (ExcelHelper.hasExcelFormat(file)) {
-            postulantService.ImportPostulant(file);
+            postulantService.ImportPostulant(file,idEntretien);
 
             return new ResponseEntity<>("Fichier importer avec succès.", HttpStatus.OK);
 
@@ -60,7 +67,7 @@ public class PostulantController {
     public ResponseEntity<?> getQuestionInfo(@PathVariable Long id) {
         Postulant postulant= postulantService.readPostulantByid(id);
         if (postulant == null) {
-            return new ResponseEntity<>("Postulant n existe pas.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Ce postulant n existe pas.", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(postulant, HttpStatus.OK);
     }
@@ -97,9 +104,14 @@ public class PostulantController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<?> getUsersList() {
-        List<Postulant> postulants = postulantService.readPostulants();
-        if (postulants.isEmpty()) {
+    public ResponseEntity<?> getUsersList(
+            @RequestParam(value = "pageNo" ,defaultValue = "0",required = false) int pageNo,
+            @RequestParam(value = "pageSize" ,defaultValue = "10",required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {
+        PostulantResponse postulants = postulantService.readPostulants(pageNo,pageSize,sortBy,sortDir);
+        if (postulants.getContenu().isEmpty()) {
             return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
         }
         return new ResponseEntity<>(postulants, HttpStatus.OK);

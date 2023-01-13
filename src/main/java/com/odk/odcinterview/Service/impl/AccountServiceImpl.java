@@ -36,8 +36,6 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
-    private ParticipantRepository participantRepository;
-    @Autowired
     private ParticipantService participantService;
 
     public Utilisateur saveUser(String nom, String prenom, String email, String numero, String genre) {
@@ -61,7 +59,7 @@ public class AccountServiceImpl implements AccountService {
         participant.setPrenom(utilisateur.getPrenom());
         participant.setEmail(utilisateur.getEmail());
         participant.setStatus(Estatus.Jury);
-        participantService.saveParticipant(participant);
+        utilisateur.setParticipant(participant);
         utilisateurRepository.save(utilisateur);
         byte[] bytes;
         try {

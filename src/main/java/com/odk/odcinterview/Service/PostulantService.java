@@ -2,6 +2,7 @@ package com.odk.odcinterview.Service;
 
 import com.odk.odcinterview.Model.Participant;
 import com.odk.odcinterview.Model.Postulant;
+import com.odk.odcinterview.Payload.PostulantResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -11,10 +12,10 @@ public interface PostulantService {
     Postulant savePostulant(Postulant postulant);
     Postulant updatePostulant(Postulant postulant,Long id);
     void deletePostulant(Postulant postulant);
-    List<Postulant> readPostulants();
+    PostulantResponse readPostulants(int pageNo, int pageSize,String sortBy, String sortDir);
     Postulant readPostulantByid(Long id);
 
-    void ImportPostulant(MultipartFile multipartFile);
+    void ImportPostulant(MultipartFile multipartFile,Long idEntretien);
 
     ByteArrayInputStream ExportPostulant();
 

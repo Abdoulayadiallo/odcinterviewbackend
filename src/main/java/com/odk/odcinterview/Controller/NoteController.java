@@ -1,8 +1,6 @@
 package com.odk.odcinterview.Controller;
 
-import com.odk.odcinterview.Model.Note;
-import com.odk.odcinterview.Model.Postulant;
-import com.odk.odcinterview.Model.Question;
+import com.odk.odcinterview.Model.*;
 import com.odk.odcinterview.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,29 +22,38 @@ public class NoteController {
     NoteService noteService;
     @Autowired
     PostulantService postulantService;
+    @Autowired
+    AccountService accountService;
 
     // methode permettant de recuperer une note
     @GetMapping("/{id}")
     public ResponseEntity<?> getQuestionInfo(@PathVariable Long id) {
         Note note= noteService.readNoteByid(id);
         if (note == null) {
-            return new ResponseEntity<>("Note n existe pas.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Ce note n existe pas.", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
     // methode permettant d'ajouter une note
 
-    @PostMapping("/add/{idPostulant}")
-    public ResponseEntity<?> addQuestion(@PathVariable Long idPostulant,@RequestBody Note note) {
-        Postulant postulant = postulantService.readPostulantByid(idPostulant);
+    @PostMapping("/add/{critereId}/{postulantId}/{Jury}")
+    public ResponseEntity<?> addNote(@PathVariable Long critereId,@PathVariable Long postulantId,@PathVariable String Jury,@RequestBody Note note) {
+        Postulant postulant = postulantService.readPostulantByid(postulantId);
         if(postulant == null) {
-            return new ResponseEntity<>("Ce postulant existe deja.", HttpStatus.OK);
+            return new ResponseEntity<>("Ce postulant n existe pas.", HttpStatus.OK);
         }
-
+        Critere critere = critereService.readCritereByid(critereId);
+        if(critere == null) {
+            return new ResponseEntity<>("Ce critere n existe pas.", HttpStatus.OK);
+        }
+        Utilisateur utilisateur = accountService.findByUsername(Jury);
+        if(utilisateur == null) {
+            return new ResponseEntity<>("Ce jury n existe pas.", HttpStatus.OK);
+        }
         if(noteService.readNoteByid(note.getId()) != null) {
             return new ResponseEntity<>("Cette note existe deja.", HttpStatus.OK);
         }
-        noteService.saveNote(note,idPostulant);
+        noteService.saveNote(note,critereId,postulantId,Jury);
         return new ResponseEntity<>(note, HttpStatus.CREATED);
     }
     // methode permettant de modifier une Note

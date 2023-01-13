@@ -30,7 +30,7 @@ public class QuestionController {
     public ResponseEntity<?> getQuestionInfo(@PathVariable Long id) {
         Question question= questionService.readQuestionByid(id);
         if (question == null) {
-            return new ResponseEntity<>("Question n existe pas.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Cette question n existe pas.", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(question, HttpStatus.OK);
     }

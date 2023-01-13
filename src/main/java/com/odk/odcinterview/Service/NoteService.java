@@ -6,7 +6,7 @@ import com.odk.odcinterview.Model.Note;
 import java.util.List;
 
 public interface NoteService {
-    Note saveNote(Note note, Long critereId);
+    Note saveNote(Note note, Long critereId,Long postulantId,String jury);
     Note updateNote(Note note,Long id);
     void deleteNote(Note note);
     List<Note> readNotes();

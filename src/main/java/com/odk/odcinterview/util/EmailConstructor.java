@@ -1,5 +1,7 @@
 package com.odk.odcinterview.util;
 
+import com.odk.odcinterview.Model.Entretien;
+import com.odk.odcinterview.Model.Postulant;
 import com.odk.odcinterview.Model.Utilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -37,6 +39,21 @@ public class EmailConstructor {
 				email.setText(text, true);
 				email.setFrom(new InternetAddress(env.getProperty("support.email")));
 			}
+		};
+		return messagePreparator;
+	}
+	public MimeMessagePreparator constructNewPostulantEmail(Postulant postulant, Entretien entretien) {
+		Context context = new Context();
+		context.setVariable("postulant", postulant);
+		context.setVariable("entretien", entretien);
+		String text = templateEngine.process("newPostulantEmailTemplate", context);
+		MimeMessagePreparator messagePreparator = mimeMessage -> {
+			MimeMessageHelper email = new MimeMessageHelper(mimeMessage);
+			email.setPriority(1);
+			email.setTo(postulant.getEmail());
+			email.setSubject("Bienvenu sur ODC Interview");
+			email.setText(text, true);
+			email.setFrom(new InternetAddress(env.getProperty("support.email")));
 		};
 		return messagePreparator;
 	}
