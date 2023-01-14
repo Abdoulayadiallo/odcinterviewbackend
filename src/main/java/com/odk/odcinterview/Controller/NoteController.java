@@ -53,6 +53,9 @@ public class NoteController {
         if(noteService.readNoteByid(note.getId()) != null) {
             return new ResponseEntity<>("Cette note existe deja.", HttpStatus.OK);
         }
+        if(note.getPoint() > critere.getBarem() || note.getPoint()<0){
+            return new ResponseEntity<>("Veuillez saisir une bonne note",HttpStatus.BAD_REQUEST);
+        }
         noteService.saveNote(note,critereId,postulantId,Jury);
         return new ResponseEntity<>(note, HttpStatus.CREATED);
     }

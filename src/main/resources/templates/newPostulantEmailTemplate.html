@@ -98,7 +98,7 @@
 										</h4>
 										<div class="mktEditable" id="main_text">
 											<p>
-												Nous sommes très heureux de vous informer que vous a été retenu pour participer à l'entretien:<span th:text="${entretien.entretienNom}"></span> qui se tiendra à ODC(Orange Digital Center) qui commencera le <span th:text="${entretien.dateDebut}"></span> au <span th:text="${entretien.dateFin}"></span>.
+												Nous sommes très heureux de vous informer que vous a été retenu pour participer à l'entretien:<span th:text="${entretien.entretienNom}"></span> qui se tiendra à ODC(Orange Digital Center) qui commencera le <span th:text="${entretien.dateDebut.getDate()}"></span> à partir de au<span th:text="${entretien.dateDebut.getDate()}"></span> <span th:text="${entretien.dateFin.getDate()}"></span>.
 											</p>
 											
 											<p>

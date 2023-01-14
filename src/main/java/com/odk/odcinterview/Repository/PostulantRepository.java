@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostulantRepository extends JpaRepository<Postulant,Long> {
     Postulant findPostulantById(Long id);
+    boolean existsPostulantByEmail(String email);
 }

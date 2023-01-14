@@ -73,12 +73,16 @@ public class PostulantController {
     }
     //methode permettant d'ajouter un postulant
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addPostulant(@RequestBody Postulant postulant) {
-        if (postulantService.readPostulantByid(postulant.getId()) != null) {
-            return new ResponseEntity<>("Ce postulant existe deja.", HttpStatus.NOT_FOUND);
+    @PostMapping("/add/{idEntretien}")
+    public ResponseEntity<?> addPostulant(@PathVariable Long idEntretien, @RequestBody Postulant postulant) {
+        Entretien entretien = entretienService.readEntretienByid(idEntretien);
+        if (postulantService.existsPostulantByEmail(postulant.getEmail())) {
+            return new ResponseEntity<>("Ce postulant existe deja.", HttpStatus.EXPECTATION_FAILED);
         }
-        postulantService.savePostulant(postulant);
+        if (entretien == null) {
+            return new ResponseEntity<>("Cet entretien n existe pas.", HttpStatus.NOT_FOUND);
+        }
+        postulantService.savePostulant(postulant,idEntretien);
         return new ResponseEntity<>(postulant, HttpStatus.CREATED);
     }
     //methode permettant de modifier un Postulant
@@ -101,6 +105,24 @@ public class PostulantController {
         }
         postulantService.deletePostulant(postulant);
         return new ResponseEntity<>("Postulant a ete supprime avec succes", HttpStatus.OK);
+    }
+    @PostMapping("/accepter/{idPostulant}")
+    public ResponseEntity<?> accepterPostulant(@PathVariable Long idPostulant) {
+        Postulant postulant = postulantService.validerPostulant(idPostulant);
+        if (postulant == null) {
+            return new ResponseEntity<>("Ce Postulant n existe pas.", HttpStatus.NOT_FOUND);
+        }
+        postulantService.deletePostulant(postulant);
+        return new ResponseEntity<>("Postulant a ete accepter", HttpStatus.OK);
+    }
+    @DeleteMapping("/refuser/{idPostulant}")
+    public ResponseEntity<?> refuserPostulant(@PathVariable Long idPostulant) {
+        Postulant postulant = postulantService.refuserPostulant(idPostulant);
+        if (postulant == null) {
+            return new ResponseEntity<>("Ce Postulant n existe pas.", HttpStatus.NOT_FOUND);
+        }
+        postulantService.deletePostulant(postulant);
+        return new ResponseEntity<>("Postulant a ete refuser", HttpStatus.OK);
     }
 
     @GetMapping("/list")

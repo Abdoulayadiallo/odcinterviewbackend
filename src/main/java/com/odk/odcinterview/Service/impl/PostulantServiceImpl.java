@@ -1,13 +1,9 @@
 package com.odk.odcinterview.Service.impl;
 
-import com.odk.odcinterview.Model.Entretien;
-import com.odk.odcinterview.Model.Estatus;
-import com.odk.odcinterview.Model.Participant;
-import com.odk.odcinterview.Model.Postulant;
+import com.odk.odcinterview.Model.*;
 import com.odk.odcinterview.Payload.PostulantResponse;
 import com.odk.odcinterview.Repository.EntretienRepository;
 import com.odk.odcinterview.Repository.PostulantRepository;
-import com.odk.odcinterview.Service.ParticipantService;
 import com.odk.odcinterview.Service.PostulantService;
 import com.odk.odcinterview.util.EmailConstructor;
 import com.odk.odcinterview.util.ExcelHelper;
@@ -17,13 +13,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,8 +30,22 @@ public class PostulantServiceImpl implements PostulantService {
     private final JavaMailSender mailSender;
     private final EmailConstructor emailConstructor;
 
+
     @Override
-    public Postulant savePostulant(Postulant postulant) {
+    public Postulant savePostulant(Postulant postulant, Long idEntretien) {
+        Entretien entretien = entretienRepository.findEntretienById(idEntretien);
+        Date date = new Date();
+        Participant participant= new Participant();
+        participant.setNom(postulant.getNom());
+        participant.setPrenom(postulant.getPrenom());
+        participant.setEmail(postulant.getEmail());
+        participant.setStatus(Estatus.Postulant);
+        postulant.setParticipant(participant);
+        postulant.setDateCreation(date);
+        List<Participant> participants= new ArrayList<>();
+        participants.add(participant);
+        entretien.setParticipants(participants);
+        mailSender.send(emailConstructor.constructNewPostulantEmail(postulant,entretien));
         return postulantRepository.save(postulant);
     }
 
@@ -111,5 +119,23 @@ public class PostulantServiceImpl implements PostulantService {
         List<Postulant> postulants = postulantRepository.findAll();
         ByteArrayInputStream inputStream = ExcelHelper.postulantsToExcel(postulants);
         return inputStream;
+    }
+
+    @Override
+    public Postulant validerPostulant(Long idPostulant) {
+        Postulant postulant = postulantRepository.findPostulantById(idPostulant);
+        postulant.setDecisionFinal(DesisionFinal.Accepter);
+        return postulantRepository.save(postulant);
+    }
+
+    @Override
+    public Postulant refuserPostulant(Long idPostulant) {
+        Postulant postulant = postulantRepository.findPostulantById(idPostulant);
+        postulant.setDecisionFinal(DesisionFinal.Refuser);
+        return postulantRepository.save(postulant);    }
+
+    @Override
+    public boolean existsPostulantByEmail(String email) {
+        return postulantRepository.existsPostulantByEmail(email);
     }
 }

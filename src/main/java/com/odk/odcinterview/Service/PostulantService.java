@@ -9,8 +9,9 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public interface PostulantService {
-    Postulant savePostulant(Postulant postulant);
-    Postulant updatePostulant(Postulant postulant,Long id);
+    Postulant savePostulant(Postulant postulant, Long idEntretien);
+
+    Postulant updatePostulant(Postulant postulant, Long id);
     void deletePostulant(Postulant postulant);
     PostulantResponse readPostulants(int pageNo, int pageSize,String sortBy, String sortDir);
     Postulant readPostulantByid(Long id);
@@ -18,6 +19,14 @@ public interface PostulantService {
     void ImportPostulant(MultipartFile multipartFile,Long idEntretien);
 
     ByteArrayInputStream ExportPostulant();
+
+    Postulant validerPostulant(Long idPostulant);
+
+    Postulant refuserPostulant(Long idPostulant);
+    boolean existsPostulantByEmail(String email);
+
+
+
 
 
 

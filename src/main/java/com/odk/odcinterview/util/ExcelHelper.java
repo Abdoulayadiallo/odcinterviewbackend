@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ExcelHelper {
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    static String[] HEADERs = { "Id", "Nom", "Prenom", "Email","Numero","Genre"};
+    static String[] HEADERs = { "Id", "Nom", "Prenom", "Email","Numero","Genre","Decision final","Note final","Rang","Numero matricule","Resultat final"};
     static String SHEET = "Postulant";
 
     public static boolean hasExcelFormat(MultipartFile file) {
@@ -123,7 +123,7 @@ public class ExcelHelper {
                 row.createCell(3).setCellValue(postulant.getEmail());
                 row.createCell(4).setCellValue(postulant.getNumero());
                 row.createCell(5).setCellValue(postulant.getGenre());
-                row.createCell(6).setCellValue(postulant.getDecisionFinal());
+                row.createCell(6).setCellValue(postulant.getDecisionFinal().ordinal());
                 row.createCell(7).setCellValue(postulant.getNoteFinal());
                 row.createCell(8).setCellValue(postulant.getRang());
                 row.createCell(9).setCellValue(postulant.getNumeroMTCL());

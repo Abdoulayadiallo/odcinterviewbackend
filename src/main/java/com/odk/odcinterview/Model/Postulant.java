@@ -22,7 +22,8 @@ public class Postulant {
     private String resultatFinal;
     private String noteFinal;
     private int rang;
-    private String decisionFinal;
+    @Enumerated(EnumType.STRING)
+    private DesisionFinal decisionFinal;
     private String commentaireFinal;
     private Date dateCreation;
     @OneToOne(cascade=CascadeType.ALL)
