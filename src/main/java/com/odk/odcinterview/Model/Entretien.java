@@ -23,4 +23,6 @@ public class Entretien {
     private List<Critere> critereList;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Participant> participants;
+    @ManyToOne
+    private Etat etat;
 }
