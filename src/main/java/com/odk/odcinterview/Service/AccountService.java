@@ -3,6 +3,7 @@ package com.odk.odcinterview.Service;
 import com.odk.odcinterview.Model.Role;
 import com.odk.odcinterview.Model.Utilisateur;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,4 +28,6 @@ public interface AccountService {
     List<Utilisateur> userList();
 
     Utilisateur findByEmail(String userEmail);
+
+    String saveUserImage(MultipartFile multipartFile, Long userImageId);
 }

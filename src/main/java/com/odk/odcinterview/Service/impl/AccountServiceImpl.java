@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -159,5 +160,19 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Utilisateur findByEmail(String userEmail) {
         return utilisateurRepository.findByEmail(userEmail);
+    }
+
+    @Override
+    public String saveUserImage(MultipartFile multipartFile, Long userImageId) {
+        byte[] bytes;
+        try {
+            Files.deleteIfExists(Paths.get(Constants.USER_FOLDER + "/" + userImageId + ".png"));
+            bytes = multipartFile.getBytes();
+            Path path = Paths.get(Constants.USER_FOLDER + userImageId + ".png");
+            Files.write(path, bytes);
+            return "User picture saved to server";
+        } catch (IOException e) {
+            return "User picture Saved";
+        }
     }
 }

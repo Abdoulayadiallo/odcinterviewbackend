@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +58,7 @@ public class AccountController {
         String username = request.get("username");
         Utilisateur utilisateur = accountService.findByUsername(username);
         if (utilisateur == null) {
-            return new ResponseEntity<>("Utilisateur non trouvé", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Utilisateur non trouvé", HttpStatus.BAD_REQUEST);
         }
         try {
             accountService.updateUser(utilisateur, request);
@@ -110,5 +111,18 @@ public class AccountController {
         Utilisateur utilisateur = accountService.findByUsername(username);
         accountService.deleteUser(utilisateur);
         return new ResponseEntity<String>("Utilisateur supprimé avec succès!", HttpStatus.OK);
+    }
+    @PostMapping("/photo/upload/{username}")
+    public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile multipartFile,@PathVariable String username) {
+        Utilisateur utilisateur = accountService.findByUsername(username);
+        if (utilisateur == null) {
+            return new ResponseEntity<>("Cet username n existe", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            accountService.saveUserImage(multipartFile, utilisateur.getId());
+            return new ResponseEntity<>("User Picture Saved!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("User Picture Not Saved", HttpStatus.BAD_REQUEST);
+        }
     }
 }
