@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,7 +73,6 @@ public class PostulantController {
         return new ResponseEntity<>(postulant, HttpStatus.OK);
     }
     //methode permettant d'ajouter un postulant
-
     @PostMapping("/add/{idEntretien}")
     public ResponseEntity<?> addPostulant(@PathVariable Long idEntretien, @RequestBody Postulant postulant) {
         Entretien entretien = entretienService.readEntretienByid(idEntretien);
@@ -86,7 +86,6 @@ public class PostulantController {
         return new ResponseEntity<>(postulant, HttpStatus.CREATED);
     }
     //methode permettant de modifier un Postulant
-
     @PutMapping("/update/{idPostulant}")
     public ResponseEntity<?> updatePostulant(@PathVariable Long idPostulant,@RequestBody Postulant postulant) {
         if (postulantService.readPostulantByid(idPostulant) == null) {
@@ -106,6 +105,7 @@ public class PostulantController {
         postulantService.deletePostulant(postulant);
         return new ResponseEntity<>("Postulant a ete supprime avec succes", HttpStatus.OK);
     }
+
     @PostMapping("/accepter/{idPostulant}")
     public ResponseEntity<?> accepterPostulant(@PathVariable Long idPostulant) {
         Postulant postulant = postulantService.validerPostulant(idPostulant);

@@ -1,5 +1,7 @@
 package com.odk.odcinterview.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +17,9 @@ public class Critere {
     private String critereNom;
     private int barem;
     private boolean elimination;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Question> questionList;
-
+    @ManyToOne
+    @JsonIgnore
+    private Entretien entretien;
 }

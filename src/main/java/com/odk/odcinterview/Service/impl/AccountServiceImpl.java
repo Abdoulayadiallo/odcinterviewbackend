@@ -158,6 +158,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public List<Utilisateur> juryList() {
+        Role juryrole = roleRepository.findByRoleName(Erole.JURY);
+        return utilisateurRepository.findUtilisteurByRole(juryrole);
+    }
+
+    @Override
     public Utilisateur findByEmail(String userEmail) {
         return utilisateurRepository.findByEmail(userEmail);
     }

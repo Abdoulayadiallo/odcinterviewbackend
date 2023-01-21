@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,8 @@ public class EntretienController {
     PostulantService postulantService;
 
     //methode permettant de recuperer un entretien
+
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getEntretienInfo(@PathVariable Long id) {
         Entretien entretien= entretienService.readEntretienByid(id);
@@ -40,6 +43,7 @@ public class EntretienController {
         return new ResponseEntity<>(entretien, HttpStatus.OK);
     }
     //methode permettant d'ajouter un entretien avec son critere
+
 
     @PostMapping("/add/{idCritere}")
     public ResponseEntity<?> addEntretien(@PathVariable Long idCritere,@RequestBody Entretien entretien) {
@@ -55,6 +59,7 @@ public class EntretienController {
     }
     //methode permettant de modifier un entretien
 
+
     @PutMapping("/update/{idEntretien}")
     public ResponseEntity<?> updateEntretien(@PathVariable Long idEntretien,@RequestBody Entretien entretien) {
         if (entretienService.readEntretienByid(idEntretien) == null) {
@@ -64,6 +69,7 @@ public class EntretienController {
         return new ResponseEntity<>(entretien1, HttpStatus.OK);
     }
     //methode permettant de supprimer un entretien
+
 
     @DeleteMapping("/delete/{idEntretien}")
     public ResponseEntity<?> deleteEntretien(@PathVariable Long idEntretien) {

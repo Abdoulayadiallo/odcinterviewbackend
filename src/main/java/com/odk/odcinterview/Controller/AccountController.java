@@ -30,6 +30,14 @@ public class AccountController {
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+    @GetMapping("/jurylist")
+    public ResponseEntity<?> getJuryList() {
+        List<Utilisateur> jurys = accountService.juryList();
+        if (jurys.isEmpty()) {
+            return new ResponseEntity<>("Liste jury vide.", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(jurys, HttpStatus.OK);
+    }
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody HashMap<String, String> request) {
         String username = request.get("username");

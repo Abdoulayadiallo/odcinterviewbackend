@@ -1,8 +1,10 @@
 package com.odk.odcinterview.Service.impl;
 
 import com.odk.odcinterview.Model.Critere;
+import com.odk.odcinterview.Model.Entretien;
 import com.odk.odcinterview.Model.Question;
 import com.odk.odcinterview.Repository.CritereRepository;
+import com.odk.odcinterview.Repository.EntretienRepository;
 import com.odk.odcinterview.Repository.QuestionRepository;
 import com.odk.odcinterview.Service.CritereService;
 import org.springframework.stereotype.Service;
@@ -14,19 +16,24 @@ import java.util.List;
 public class CritereServiceImpl implements CritereService {
     private final CritereRepository critereRepository;
     private final QuestionRepository questionRepository;
+    private final EntretienRepository entretienRepository;
 
     public CritereServiceImpl(CritereRepository critereRepository,
-                              QuestionRepository questionRepository) {
+                              QuestionRepository questionRepository,
+                              EntretienRepository entretienRepository) {
         this.critereRepository = critereRepository;
         this.questionRepository = questionRepository;
+        this.entretienRepository = entretienRepository;
     }
 
     @Override
-    public Critere saveCritere(Critere critere,Long questionId) {
+    public Critere saveCritere(Critere critere,Long IdEntretien, Long questionId) {
         Question question = questionRepository.findQuestionById(questionId);
+        Entretien entretien = entretienRepository.findEntretienById(IdEntretien);
         List<Question> questionList= new ArrayList<>();
         questionList.add(question);
         critere.setQuestionList(questionList);
+        critere.setEntretien(entretien);
         return critereRepository.save(critere);
     }
 
@@ -53,5 +60,10 @@ public class CritereServiceImpl implements CritereService {
     @Override
     public Critere readCritereByid(Long id) {
         return critereRepository.findCritereById(id);
+    }
+
+    @Override
+    public Critere saveCritereSimple(Critere critere) {
+        return critereRepository.save(critere);
     }
 }

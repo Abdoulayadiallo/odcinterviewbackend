@@ -27,6 +27,11 @@ public class NoteServiceImpl implements NoteService {
     public Note saveNote(Note note, Long critereId,Long postulantId,String Jury) {
         //Recuperer le Postulant par son id
         Postulant postulant = postulantRepository.findPostulantById(postulantId);
+        //Recuperer le critere par son id
+        Critere critere = critereRepository.findCritereById(critereId);
+        if(critere.isElimination()==true){
+            postulant.setDecisionFinal(DesisionFinal.Refuser);
+        }
         //Recuperer le participant par son postulant
         Participant p=postulant.getParticipant();
         // Creer d'une liste pour stocker le postulant et le jury
@@ -41,8 +46,7 @@ public class NoteServiceImpl implements NoteService {
         participants.add(j);
         //Ajout des participants à note
         note.setParticipants(participants);
-        //Recuperer le critere par son id
-        Critere critere = critereRepository.findCritereById(critereId);
+
         //Ajout du critère à note
         note.setCritere(critere);
         return noteRepository.save(note);

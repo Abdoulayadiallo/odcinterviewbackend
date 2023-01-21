@@ -26,6 +26,7 @@ public interface AccountService {
     Utilisateur findByUsername(String username);
 
     List<Utilisateur> userList();
+    List<Utilisateur> juryList();
 
     Utilisateur findByEmail(String userEmail);
 

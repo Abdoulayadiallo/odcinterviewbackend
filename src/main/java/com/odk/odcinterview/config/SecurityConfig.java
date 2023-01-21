@@ -3,6 +3,7 @@ package com.odk.odcinterview.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -13,9 +14,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	private static final String[] PUBLIC_MATCHERS = {"/utilisateur/login", "/utilisateur/register","/utilisateur/role", "/utilisateur/resetPassword/**", "/image/**","/entretien/download/**"};
+	private static final String[] PUBLIC_MATCHERS = {"/utilisateur/login", "postulant/list","/utilisateur/register","/utilisateur/role", "/utilisateur/resetPassword/**", "/image/**","/entretien/download/**"};
 //	private static final String[] PUBLIC_MATCHERS = { "/**" };
 	
 	@Autowired

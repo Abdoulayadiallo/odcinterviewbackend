@@ -7,6 +7,7 @@ import com.odk.odcinterview.Service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,7 +58,6 @@ public class QuestionController {
         return new ResponseEntity<>(question1, HttpStatus.OK);
     }
     //methode permettant de supprimer une Question
-
     @DeleteMapping("/delete/{idQuestion}")
     public ResponseEntity<?> deleteQuestion(@PathVariable Long idQuestion) {
         Question question = questionService.readQuestionByid(idQuestion);
