@@ -45,16 +45,16 @@ public class EntretienController {
     //methode permettant d'ajouter un entretien avec son critere
 
 
-    @PostMapping("/add/{idCritere}")
-    public ResponseEntity<?> addEntretien(@PathVariable Long idCritere,@RequestBody Entretien entretien) {
-        Critere critere = critereService.readCritereByid(idCritere);
-        if(critere == null){
-            return new ResponseEntity<>("Ce critere n existe pas",HttpStatus.NOT_FOUND);
-        }
+    @PostMapping("/add/")
+    public ResponseEntity<?> addEntretien(@RequestBody Entretien entretien) {
+//        Critere critere = critereService.readCritereByid(idCritere);
+//        if(critere == null){
+//            return new ResponseEntity<>("Ce critere n existe pas",HttpStatus.NOT_FOUND);
+//        }
         if (entretienService.readEntretienByid(entretien.getId()) != null) {
             return new ResponseEntity<>("cet entretien existe deja.", HttpStatus.NOT_FOUND);
         }
-        entretienService.saveEntretien(entretien,idCritere);
+        entretienService.saveEntretien(entretien);
         return new ResponseEntity<>(entretien, HttpStatus.CREATED);
     }
     //methode permettant de modifier un entretien

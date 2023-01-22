@@ -65,7 +65,7 @@ public class PostulantController {
     }
     //methode permettant de recuperer un postulant
     @GetMapping("/{id}")
-    public ResponseEntity<?> getQuestionInfo(@PathVariable Long id) {
+    public ResponseEntity<?> getPostulantInfo(@PathVariable Long id) {
         Postulant postulant= postulantService.readPostulantByid(id);
         if (postulant == null) {
             return new ResponseEntity<>("Ce postulant n existe pas.", HttpStatus.NOT_FOUND);

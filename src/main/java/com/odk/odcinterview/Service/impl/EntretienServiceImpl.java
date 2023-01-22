@@ -24,15 +24,29 @@ public class EntretienServiceImpl implements EntretienService {
 
 
     @Override
-    public Entretien saveEntretien(Entretien entretien, Long idCritere) {
-        Critere critere = critereRepository.findCritereById(idCritere);
+    public Entretien saveEntretien(Entretien entretien) {
+        //Critere critere = critereRepository.findCritereById(idCritere);
+        //
+        Etat encour=etatRepository.findByStatus("EN COUR");
+        Etat termine=etatRepository.findByStatus("TERMINE");
         Etat avenir=etatRepository.findByStatus("A VENIR");
-        List<Critere> critereList = new ArrayList<>();
-        critereList.add(critere);
-        entretien.setCritereList(critereList);
-        Date date = new Date();
-        entretien.setDateCreation(date);
-        entretien.setEtat(avenir);
+        Date today = new Date();
+        entretien.setDateCreation(today);
+
+        // List<Critere> critereList = new ArrayList<>();
+        //critereList.add(critere);
+        //entretien.setCritereList(critereList);
+        if (today.after(entretien.getDateDebut()) && today.before(entretien.getDateFin())) {
+            entretien.setEtat(encour);
+            entretienRepository.save(entretien);
+        }else if (today.before(entretien.getDateDebut())) {
+            entretien.setEtat(avenir);
+            entretienRepository.save(entretien);
+        }else if (today.after(entretien.getDateFin())) {
+            entretien.setEtat(termine);
+            entretienRepository.save(entretien);
+        }
+
         return entretienRepository.save(entretien);
     }
 
@@ -59,7 +73,7 @@ public class EntretienServiceImpl implements EntretienService {
         return entretienRepository.findEntretienById(id);
     }
 
-    @Scheduled(fixedRateString = "PT01S")
+    @Scheduled(fixedRateString = "1000")
     public void etatEntretien(){
         List<Entretien> allEntretiens=entretienRepository.findAll();
 
