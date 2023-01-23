@@ -19,4 +19,5 @@ public class Notification {
     private String message;
     private String objet;
     private Date date;
+    private boolean vue;
 }

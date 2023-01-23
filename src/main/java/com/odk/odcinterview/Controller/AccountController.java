@@ -1,5 +1,6 @@
 package com.odk.odcinterview.Controller;
 
+import com.odk.odcinterview.Model.Postulant;
 import com.odk.odcinterview.Model.Utilisateur;
 import com.odk.odcinterview.Service.AccountService;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +30,14 @@ public class AccountController {
             return new ResponseEntity<>("Utilisateurs non trouvé.", HttpStatus.OK);
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+    @GetMapping("/{username}")
+    public ResponseEntity<?> getUserInfo(@PathVariable String username) {
+        Utilisateur user = accountService.findByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>("Utilisateur non trouvé.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
     @GetMapping("/jurylist")
     public ResponseEntity<?> getJuryList() {

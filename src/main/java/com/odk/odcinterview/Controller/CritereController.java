@@ -61,8 +61,8 @@ public class CritereController {
         if (critereService.readCritereByid(critere.getId()) != null) {
             return new ResponseEntity<>("ce critere existe deja.", HttpStatus.BAD_REQUEST);
         }
-        critereService.saveCritereSimple(critere);
-        return new ResponseEntity<>(critere, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(critereService.saveCritereSimple(critere), HttpStatus.CREATED);
     }
     //methode permettant de modifier un critere
 

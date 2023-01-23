@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -94,8 +95,9 @@ public class PostulantServiceImpl implements PostulantService {
         try {
             List<Postulant>  postulants = ExcelHelper.excelToPostulants(multipartFile.getInputStream());
             postulants.forEach(postulant -> {
-                Date date = new Date();
-                String numeroMatricule = "ODCI"+postulant.getId().toString()+date.getYear();
+                LocalDate date = LocalDate.now();
+                Date date1= new Date();
+                String numeroMatricule = "ODCI"+postulant.getId().toString()+postulant.getGenre().substring(0,1)+date.getYear();
                 Participant participant= new Participant();
                 participant.setNom(postulant.getNom());
                 participant.setPrenom(postulant.getPrenom());
@@ -103,7 +105,7 @@ public class PostulantServiceImpl implements PostulantService {
                 participant.setStatus(Estatus.Postulant);
                 postulant.setParticipant(participant);
                 postulant.setNumeroMTCL(numeroMatricule);
-                postulant.setDateCreation(date);
+                postulant.setDateCreation(date1);
                 participants.add(participant);
                 entretien.setParticipants(participants);
                // mailSender.send(emailConstructor.constructNewPostulantEmail(postulant,entretien));

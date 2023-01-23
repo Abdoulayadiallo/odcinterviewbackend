@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -40,18 +41,20 @@ public class AccountServiceImpl implements AccountService {
     private ParticipantService participantService;
 
     public Utilisateur saveUser(String nom, String prenom, String email, String numero, String genre) {
-        String password = nom.substring(0, 1) + prenom.substring(0, 1) + "@ODC2023";
-        String username = nom.substring(0, 1) + prenom.substring(0, 1) + nom;
+        LocalDate date = LocalDate.now();
+        String password = nom.substring(0, 1) + prenom.substring(0, 1) + "@ODC" + date.getYear();
         String encryptedPassword = bCryptPasswordEncoder.encode(password);
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setPassword(encryptedPassword);
         utilisateur.setNom(nom);
         utilisateur.setPrenom(prenom);
+        String username = nom.substring(0, 1) + prenom.substring(0, 1) + nom;
         utilisateur.setUsername(username);
         utilisateur.setEmail(email);
         utilisateur.setGenre(genre);
         if (utilisateur.getDateCreation() == null) {
             utilisateur.setDateCreation(new Date());
+
         }
         Role role = roleRepository.findByRoleName(Erole.JURY);
         utilisateur.setRole(role);
