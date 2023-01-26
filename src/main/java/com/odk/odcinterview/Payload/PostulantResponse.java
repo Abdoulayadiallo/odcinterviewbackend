@@ -17,5 +17,6 @@ public class PostulantResponse {
     private long totalElements;
     private int totalPages;
     private boolean last;
+    private String genre;
 
 }

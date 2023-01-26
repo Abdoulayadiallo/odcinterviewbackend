@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Date;
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/postulant")
 public class PostulantController {
@@ -130,9 +131,10 @@ public class PostulantController {
             @RequestParam(value = "pageNo" ,defaultValue = "0",required = false) int pageNo,
             @RequestParam(value = "pageSize" ,defaultValue = "10",required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
+            @RequestParam(value = "genre", required = false) String genre
     ) {
-        PostulantResponse postulants = postulantService.readPostulants(pageNo,pageSize,sortBy,sortDir);
+        PostulantResponse postulants = postulantService.readPostulants(pageNo,pageSize,sortBy,sortDir,genre);
         if (postulants.getContenu().isEmpty()) {
             return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
         }

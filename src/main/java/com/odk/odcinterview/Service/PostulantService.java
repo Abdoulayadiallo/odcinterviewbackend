@@ -13,7 +13,7 @@ public interface PostulantService {
 
     Postulant updatePostulant(Postulant postulant, Long id);
     void deletePostulant(Postulant postulant);
-    PostulantResponse readPostulants(int pageNo, int pageSize,String sortBy, String sortDir);
+    PostulantResponse readPostulants(int pageNo, int pageSize,String sortBy, String sortDir,String genre);
     Postulant readPostulantByid(Long id);
 
     void ImportPostulant(MultipartFile multipartFile,Long idEntretien);

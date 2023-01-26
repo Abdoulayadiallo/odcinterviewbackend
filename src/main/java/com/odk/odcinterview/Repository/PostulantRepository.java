@@ -13,6 +13,6 @@ public interface PostulantRepository extends JpaRepository<Postulant,Long> {
     boolean existsPostulantByEmail(String email);
 
     Page<Postulant> findByGenreContaining(String genre, Pageable pageable);
-    Page<Postulant> findByNomOrPrenomContaining(String nomOrprenom, Pageable pageable);
+   // Page<Postulant> findByNomOrPrenomContaining(String nomOrprenom, Pageable pageable);
 
 }
