@@ -23,6 +23,8 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
+    private Long userImageId;
+
     @GetMapping("/list")
     public ResponseEntity<?> getUsersList() {
         List<Utilisateur> users = accountService.userList();
@@ -72,13 +74,14 @@ public class AccountController {
 
     @PostMapping("/update")
     public ResponseEntity<?> updateProfile(@RequestBody HashMap<String, String> request) {
-        String username = request.get("username");
-        Utilisateur utilisateur = accountService.findByUsername(username);
+        String id = request.get("id");
+        Utilisateur utilisateur = accountService.findUserById(Long.valueOf(id));
         if (utilisateur == null) {
             return new ResponseEntity<>("Utilisateur non trouvé", HttpStatus.BAD_REQUEST);
         }
         try {
             accountService.updateUser(utilisateur, request);
+            userImageId = utilisateur.getId();
             return new ResponseEntity<>(utilisateur, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Une erreur est survenue", HttpStatus.BAD_REQUEST);
@@ -129,14 +132,11 @@ public class AccountController {
         accountService.deleteUser(utilisateur);
         return new ResponseEntity<String>("Utilisateur supprimé avec succès!", HttpStatus.OK);
     }
-    @PostMapping("/photo/upload/{username}")
-    public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile multipartFile,@PathVariable String username) {
-        Utilisateur utilisateur = accountService.findByUsername(username);
-        if (utilisateur == null) {
-            return new ResponseEntity<>("Cet username n existe", HttpStatus.BAD_REQUEST);
-        }
+    @PostMapping("/photo/upload")
+    public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile multipartFile) {
+
         try {
-            accountService.saveUserImage(multipartFile, utilisateur.getId());
+            accountService.saveUserImage(multipartFile, userImageId);
             return new ResponseEntity<>("User Picture Saved!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("User Picture Not Saved", HttpStatus.BAD_REQUEST);

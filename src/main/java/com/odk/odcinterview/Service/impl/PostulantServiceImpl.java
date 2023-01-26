@@ -91,7 +91,7 @@ public class PostulantServiceImpl implements PostulantService {
     @Override
     public void ImportPostulant(MultipartFile multipartFile,Long idEntretien) {
         Entretien entretien = entretienRepository.findEntretienById(idEntretien);
-        List<Participant> participants = new ArrayList<>();
+        //List<Participant> participants = new ArrayList<>();
         try {
             List<Postulant>  postulants = ExcelHelper.excelToPostulants(multipartFile.getInputStream());
             postulants.forEach(postulant -> {
@@ -102,12 +102,14 @@ public class PostulantServiceImpl implements PostulantService {
                 participant.setNom(postulant.getNom());
                 participant.setPrenom(postulant.getPrenom());
                 participant.setEmail(postulant.getEmail());
+                participant.setEntretien(entretien);
                 participant.setStatus(Estatus.Postulant);
                 postulant.setParticipant(participant);
                 postulant.setNumeroMTCL(numeroMatricule);
                 postulant.setDateCreation(date1);
-                participants.add(participant);
-                entretien.setParticipants(participants);
+                //participants.add(participant);
+                //System.out.println(participants);
+                //entretien.setParticipants(participants);
                // mailSender.send(emailConstructor.constructNewPostulantEmail(postulant,entretien));
             });
             postulantRepository.saveAll(postulants);

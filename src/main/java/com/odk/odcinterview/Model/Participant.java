@@ -25,4 +25,6 @@ public class Participant {
     private Collection<Notification> notifications;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Utilisateur> utilisateurs;
+    @ManyToOne()
+    private Entretien entretien;
 }

@@ -31,4 +31,7 @@ public interface AccountService {
     Utilisateur findByEmail(String userEmail);
 
     String saveUserImage(MultipartFile multipartFile, Long userImageId);
+
+    Utilisateur findUserById(Long id);
+
 }

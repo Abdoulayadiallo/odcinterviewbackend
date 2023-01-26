@@ -116,13 +116,13 @@ public class AccountServiceImpl implements AccountService {
         String nom = request.get("nom");
         String numero = request.get("numero");
         String prenom = request.get("prenom");
-        String username = request.get("username");
+        //String username = request.get("username");
         String email = request.get("email");
         String bio = request.get("bio");
         utilisateur.setNom(nom);
         utilisateur.setNumero(numero);
         utilisateur.setNumero(prenom);
-        utilisateur.setUsername(username);
+        //utilisateur.setUsername(username);
         utilisateur.setEmail(email);
         utilisateur.setBio(bio);
         utilisateurRepository.save(utilisateur);
@@ -184,4 +184,11 @@ public class AccountServiceImpl implements AccountService {
             return "User picture Saved";
         }
     }
+
+    @Override
+    public Utilisateur findUserById(Long id) {
+        return utilisateurRepository.findUtilisteurById(id);
+    }
+
+
 }

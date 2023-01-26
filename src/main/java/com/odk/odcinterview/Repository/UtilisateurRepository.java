@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface UtilisateurRepository extends JpaRepository<Utilisateur,Long> {
     Utilisateur findByUsername(String username);
+    boolean existsByUsername(String username);
+    Utilisateur findUtilisteurById(Long id);
     List<Utilisateur> findUtilisteurByRole(Role role);
     Utilisateur findByEmail(String userEmail);
     List<Utilisateur> findByUsernameContaining(String username);

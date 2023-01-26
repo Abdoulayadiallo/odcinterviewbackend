@@ -1,14 +1,17 @@
 package com.odk.odcinterview.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Entretien {
     @Id
@@ -21,7 +24,8 @@ public class Entretien {
     private String nombreParticipant;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Critere> critereList;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "entretien" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Participant> participants;
     @ManyToOne
     private Etat etat;
