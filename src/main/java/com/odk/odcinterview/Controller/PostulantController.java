@@ -132,9 +132,10 @@ public class PostulantController {
             @RequestParam(value = "pageSize" ,defaultValue = "10",required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
-            @RequestParam(value = "genre", required = false) String genre
+            @RequestParam(value = "genre", required = false) String genre,
+            @RequestParam(value = "nom", required = false) String nomOrprenom
     ) {
-        PostulantResponse postulants = postulantService.readPostulants(pageNo,pageSize,sortBy,sortDir,genre);
+        PostulantResponse postulants = postulantService.readPostulants(pageNo,pageSize,sortBy,sortDir,genre,nomOrprenom);
         if (postulants.getContenu().isEmpty()) {
             return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
         }

@@ -67,15 +67,17 @@ public class PostulantServiceImpl implements PostulantService {
     }
 
     @Override
-    public PostulantResponse readPostulants(int pageNo,int pageSize,String sortBy, String sortDir, String genre) {
+    public PostulantResponse readPostulants(int pageNo,int pageSize,String sortBy, String sortDir, String genre,String nomOrprenom) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
         Page<Postulant> postulants;
-        if(genre == null)
+        if(genre == null && nomOrprenom==null)
             postulants = postulantRepository.findAll(pageable);
-        else
+        else if(genre != null && nomOrprenom == null)
             postulants = postulantRepository.findByGenreContaining(genre, pageable);
+        else
+            postulants = postulantRepository.findByNomOrPrenomContaining(nomOrprenom,nomOrprenom,pageable);
 
         List<Postulant> postulants1 = postulants.getContent();
         PostulantResponse postulantResponse = new PostulantResponse();
@@ -86,6 +88,7 @@ public class PostulantServiceImpl implements PostulantService {
         postulantResponse.setTotalElements(postulants.getTotalElements());
         postulantResponse.setLast(postulants.isLast());
         postulantResponse.setGenre(genre);
+        postulantResponse.setNomOrprenom(nomOrprenom);
         return postulantResponse;
 
     }

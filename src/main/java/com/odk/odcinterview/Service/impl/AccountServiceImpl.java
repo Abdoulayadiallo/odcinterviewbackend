@@ -121,7 +121,7 @@ public class AccountServiceImpl implements AccountService {
         String bio = request.get("bio");
         utilisateur.setNom(nom);
         utilisateur.setNumero(numero);
-        utilisateur.setNumero(prenom);
+        utilisateur.setPrenom(prenom);
         //utilisateur.setUsername(username);
         utilisateur.setEmail(email);
         utilisateur.setBio(bio);
