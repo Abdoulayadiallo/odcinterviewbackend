@@ -1,13 +1,15 @@
 package com.odk.odcinterview.Service.impl;
 
-import com.odk.odcinterview.Model.Critere;
-import com.odk.odcinterview.Model.Entretien;
-import com.odk.odcinterview.Model.Etat;
-import com.odk.odcinterview.Repository.CritereRepository;
-import com.odk.odcinterview.Repository.EntretienRepository;
-import com.odk.odcinterview.Repository.EtatRepository;
+import com.odk.odcinterview.Model.*;
+import com.odk.odcinterview.Payload.EntretienResponse;
+import com.odk.odcinterview.Payload.PostulantResponse;
+import com.odk.odcinterview.Repository.*;
 import com.odk.odcinterview.Service.EntretienService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class EntretienServiceImpl implements EntretienService {
     private final EntretienRepository entretienRepository;
     private final CritereRepository critereRepository;
     private final EtatRepository etatRepository;
+    private final UtilisateurRepository utilisateurRepository;
+    private final ParticipantRepository participantRepository;
 
 
     @Override
@@ -64,8 +68,25 @@ public class EntretienServiceImpl implements EntretienService {
     }
 
     @Override
-    public List<Entretien> readEntretiens() {
-        return entretienRepository.findAll();
+    public EntretienResponse readEntretiens(int pageNo,int pageSize,String sortBy, String sortDir,String username) {
+        Utilisateur utilisateur = utilisateurRepository.findByUsername(username);
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+        Page<Entretien> entretiens;
+        if(username==null)
+            entretiens = entretienRepository.findAll(pageable);
+        else
+            entretiens = entretienRepository.findEntretienByParticipantsContaining(utilisateur.getParticipant(),pageable);
+        List<Entretien> listOfEntretien = entretiens.getContent();
+        EntretienResponse entretienResponse = new EntretienResponse();
+        entretienResponse.setContenu(listOfEntretien);
+        entretienResponse.setPageNo(entretiens.getNumber());
+        entretienResponse.setPageSize(entretiens.getSize());
+        entretienResponse.setTotalElements(entretiens.getTotalElements());
+        entretienResponse.setTotalPages(entretiens.getTotalPages());
+        entretienResponse.setLast(entretiens.isLast());
+        return entretienResponse;
     }
 
     @Override
@@ -99,6 +120,7 @@ public class EntretienServiceImpl implements EntretienService {
                     entretien.setEtat(termine);
                     entretienRepository.save(entretien);
                 }
+                System.out.println(entretien);
 
             } catch (Exception e) {
                 // TODO: handle exception

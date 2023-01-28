@@ -152,4 +152,6 @@ public class PostulantServiceImpl implements PostulantService {
     public boolean existsPostulantByEmail(String email) {
         return postulantRepository.existsPostulantByEmail(email);
     }
+
+
 }

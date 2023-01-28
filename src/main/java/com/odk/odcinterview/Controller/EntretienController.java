@@ -1,6 +1,8 @@
 package com.odk.odcinterview.Controller;
 
 import com.odk.odcinterview.Model.*;
+import com.odk.odcinterview.Payload.EntretienResponse;
+import com.odk.odcinterview.Payload.PostulantResponse;
 import com.odk.odcinterview.Service.*;
 import com.odk.odcinterview.util.ExcelHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,12 +84,19 @@ public class EntretienController {
     }
     //methode permettant de recuperer tous les entretiens
     @GetMapping("/list")
-    public ResponseEntity<?> getEntretienList() {
-        List<Entretien> entretiens = entretienService.readEntretiens();
-        if (entretiens.isEmpty()){
+    public ResponseEntity<?> getEntretienList(
+            @RequestParam(value = "pageNo" ,defaultValue = "0",required = false) int pageNo,
+            @RequestParam(value = "pageSize" ,defaultValue = "10",required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
+            @RequestParam(value = "username", required = false) String username
+    ) {
+        EntretienResponse entretiens = entretienService.readEntretiens(pageNo,pageSize,sortBy,sortDir,username);
+        if (entretiens.getTotalElements()==0){
             return new ResponseEntity<>("Pas encore d'entretiens.", HttpStatus.OK);
         }
         return new ResponseEntity<>(entretiens, HttpStatus.OK);
     }
+
 
 }
