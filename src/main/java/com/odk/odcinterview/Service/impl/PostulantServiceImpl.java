@@ -1,6 +1,7 @@
 package com.odk.odcinterview.Service.impl;
 
 import com.odk.odcinterview.Model.*;
+import com.odk.odcinterview.Payload.NombreResponse;
 import com.odk.odcinterview.Payload.PostulantResponse;
 import com.odk.odcinterview.Repository.EntretienRepository;
 import com.odk.odcinterview.Repository.PostulantRepository;
@@ -186,5 +187,37 @@ public class PostulantServiceImpl implements PostulantService {
         return postulantResponse;
     }
 
+    @Override
+    public NombreResponse getNombre(String genre, Long idEntretien) {
+        Entretien entretien = entretienRepository.findEntretienById(idEntretien);
+        List<Participant> participants = entretien.getParticipants();
+        List<Postulant> postulantList = new ArrayList<>();
+        for (Participant participant:participants){
+            Postulant postulant = postulantRepository.findPostulantByParticipant(participant);
+            postulantList.add(postulant);
+            System.out.println("-----------"+postulantList);
+        }
+        int nombreTotale=postulantList.size();
+        NombreResponse nombreResponse = new NombreResponse();
+        int nombreGenre = 0;
+        for (Postulant postulant:postulantList) {
+            System.out.println(postulantList);
+            if(postulant.getGenre()==genre){
+                nombreGenre = nombreGenre + 1;
+            }
+        }
+        try {
+            System.out.println(nombreTotale);
+            System.out.println(nombreGenre);
 
+            nombreResponse.setNombreParGenre(nombreGenre);
+            nombreResponse.setTotalListe(nombreTotale);
+            nombreResponse.setPourcentage(nombreGenre/nombreTotale*100);
+            nombreResponse.setContenu(postulantList);
+        }catch (Exception e){
+            e.getMessage();
+        }
+
+        return nombreResponse;
+    }
 }

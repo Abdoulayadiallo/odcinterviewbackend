@@ -2,6 +2,7 @@ package com.odk.odcinterview.Service;
 
 import com.odk.odcinterview.Model.Participant;
 import com.odk.odcinterview.Model.Postulant;
+import com.odk.odcinterview.Payload.NombreResponse;
 import com.odk.odcinterview.Payload.PostulantResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +28,7 @@ public interface PostulantService {
 
     PostulantResponse getPostulantByEntretien(Long idEntretien,int pageNo, int pageSize,String sortBy, String sortDir);
 
-
+    NombreResponse getNombre(String genre, Long idEntretien);
 
 
 

@@ -2,6 +2,7 @@ package com.odk.odcinterview.Controller;
 
 import com.odk.odcinterview.Model.Entretien;
 import com.odk.odcinterview.Model.Postulant;
+import com.odk.odcinterview.Payload.NombreResponse;
 import com.odk.odcinterview.Payload.PostulantResponse;
 import com.odk.odcinterview.Service.*;
 import com.odk.odcinterview.util.ExcelHelper;
@@ -155,6 +156,13 @@ public class PostulantController {
         }
         return new ResponseEntity<>(postulants, HttpStatus.OK);
     }
-
+    @GetMapping("/nombreGenre/{idEntretien}/{genre}")
+    public ResponseEntity<?> getNombre(@PathVariable  String genre,@PathVariable Long idEntretien){
+        if(entretienService.readEntretienByid(idEntretien)==null){
+            return new ResponseEntity<>("entretien non trouvé",HttpStatus.BAD_REQUEST);
+        }
+        NombreResponse nombreResponse = postulantService.getNombre(genre,idEntretien);
+        return new ResponseEntity<>(nombreResponse,HttpStatus.OK);
+    }
 
 }
