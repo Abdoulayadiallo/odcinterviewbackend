@@ -1,6 +1,7 @@
 package com.odk.odcinterview.Repository;
 
 import com.odk.odcinterview.Model.Critere;
+import com.odk.odcinterview.Model.Participant;
 import com.odk.odcinterview.Model.Postulant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,5 +15,7 @@ public interface PostulantRepository extends JpaRepository<Postulant,Long> {
 
     Page<Postulant> findByGenreContaining(String genre, Pageable pageable);
     Page<Postulant> findByNomOrPrenomContaining(String nom,String prenom, Pageable pageable);
+
+    Postulant findPostulantByParticipant(Participant participant);
 
 }

@@ -8,10 +8,8 @@ import com.odk.odcinterview.Service.PostulantService;
 import com.odk.odcinterview.util.EmailConstructor;
 import com.odk.odcinterview.util.ExcelHelper;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.support.PagedListHolder;
+import org.springframework.data.domain.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -151,6 +149,41 @@ public class PostulantServiceImpl implements PostulantService {
     @Override
     public boolean existsPostulantByEmail(String email) {
         return postulantRepository.existsPostulantByEmail(email);
+    }
+
+    @Override
+    public PostulantResponse getPostulantByEntretien(Long idEntretien, int pageNo, int pageSize, String sortBy, String sortDir) {
+
+        Entretien entretien = entretienRepository.findEntretienById(idEntretien);
+        List<Participant> participants = entretien.getParticipants();
+        List<Postulant> postulantList = new ArrayList<>();
+        for (Participant participant:participants){
+            Postulant postulant = postulantRepository.findPostulantByParticipant(participant);
+            postulantList.add(postulant);
+        }
+
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+      //  Page<Postulant> page = new PageImpl<>(postulantList);
+
+        // Creation
+        PagedListHolder page = new PagedListHolder(postulantList);
+        page.setPageSize(pageSize); // number of items per page
+        page.setPage(pageNo);      // set to first page
+        //page.setSort(sort);
+// Retrieval
+        page.getPageCount(); // number of pages
+        page.getPageList();
+        List<Postulant> postulants1 = page.getPageList();
+        PostulantResponse postulantResponse = new PostulantResponse();
+        postulantResponse.setContenu(postulants1);
+        postulantResponse.setPageNo(page.getPage());
+        postulantResponse.setPageSize(page.getPageSize());
+        postulantResponse.setTotalPages(page.getMaxLinkedPages());
+        postulantResponse.setTotalElements(page.getNrOfElements());
+        postulantResponse.setLast(page.isLastPage());
+        return postulantResponse;
     }
 
 

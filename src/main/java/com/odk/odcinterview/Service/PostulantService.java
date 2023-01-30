@@ -25,6 +25,8 @@ public interface PostulantService {
     Postulant refuserPostulant(Long idPostulant);
     boolean existsPostulantByEmail(String email);
 
+    PostulantResponse getPostulantByEntretien(Long idEntretien,int pageNo, int pageSize,String sortBy, String sortDir);
+
 
 
 
