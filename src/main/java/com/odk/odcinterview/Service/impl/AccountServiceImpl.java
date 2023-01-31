@@ -1,6 +1,8 @@
 package com.odk.odcinterview.Service.impl;
 
 import com.odk.odcinterview.Model.*;
+import com.odk.odcinterview.Payload.JuryResponse;
+import com.odk.odcinterview.Repository.EntretienRepository;
 import com.odk.odcinterview.Repository.ParticipantRepository;
 import com.odk.odcinterview.Repository.RoleRepository;
 import com.odk.odcinterview.Repository.UtilisateurRepository;
@@ -39,8 +41,11 @@ public class AccountServiceImpl implements AccountService {
     private JavaMailSender mailSender;
     @Autowired
     private ParticipantService participantService;
+    @Autowired
+    private EntretienRepository entretienRepository;
 
-    public Utilisateur saveUser(String nom, String prenom, String email, String numero, String genre) {
+    public Utilisateur saveUser(String nom, String prenom, String email, String numero, String genre,Long idEntretien) {
+        Entretien entretien = entretienRepository.findEntretienById(idEntretien);
         LocalDate date = LocalDate.now();
         String password = nom.substring(0, 1) + prenom.substring(0, 1) + "@ODC" + date.getYear();
         String encryptedPassword = bCryptPasswordEncoder.encode(password);
@@ -58,12 +63,17 @@ public class AccountServiceImpl implements AccountService {
         }
         Role role = roleRepository.findByRoleName(Erole.JURY);
         utilisateur.setRole(role);
+        List<Participant> participantList = entretien.getParticipants();
         Participant participant= new Participant();
         participant.setNom(utilisateur.getNom());
         participant.setPrenom(utilisateur.getPrenom());
         participant.setEmail(utilisateur.getEmail());
         participant.setStatus(Estatus.Jury);
+        participant.setEntretien(entretien);
         utilisateur.setParticipant(participant);
+        //entretien.setParticipants(participantList);
+
+        //entretienRepository.save(entretien);
         utilisateurRepository.save(utilisateur);
         byte[] bytes;
         try {
@@ -164,6 +174,33 @@ public class AccountServiceImpl implements AccountService {
     public List<Utilisateur> juryList() {
         Role juryrole = roleRepository.findByRoleName(Erole.JURY);
         return utilisateurRepository.findUtilisteurByRole(juryrole);
+    }
+
+    @Override
+    public JuryResponse juryListByEntretien(Long idEntretien) {
+        Entretien entretien = entretienRepository.findEntretienById(idEntretien);
+        Role juryRole = roleRepository.findByRoleName(Erole.JURY);
+        List<Utilisateur> utilisateurList = utilisateurRepository.findUtilisteurByRole(juryRole);
+        System.out.println(entretien + "(------------entretien)");
+        System.out.println(utilisateurList + "(------------uuuuuuuuuuuuuuuuuuuuu)");
+
+
+
+        List<Utilisateur> juryList = new ArrayList<>();
+
+        for (Utilisateur utilisateur:utilisateurList){
+            System.out.println(utilisateur+ "(------------uuuuuuuuuuuuuuuuuuuuuttttttttttttttt)");
+            if(utilisateur.getParticipant().getEntretien()==entretien) {
+                juryList.add(utilisateur);
+                System.out.println(utilisateur+ "(------------juuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu)");
+
+            }
+        }
+        JuryResponse juryResponses = new JuryResponse();
+
+        juryResponses.setContenu(juryList);
+        juryResponses.setTotalListe(juryList.size());
+        return juryResponses;
     }
 
     @Override

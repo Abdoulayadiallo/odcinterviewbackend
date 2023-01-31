@@ -2,6 +2,7 @@ package com.odk.odcinterview.Service;
 
 import com.odk.odcinterview.Model.Role;
 import com.odk.odcinterview.Model.Utilisateur;
+import com.odk.odcinterview.Payload.JuryResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 
 public interface AccountService {
-    Utilisateur saveUser(String nom,String prenom, String email,String numero, String genre);
+    Utilisateur saveUser(String nom,String prenom, String email,String numero, String genre,Long idEntretien);
     Utilisateur saveAdmin(Utilisateur utilisateur);
     Role saveRole(Role role);
     public void updateUserPassword(Utilisateur utilisateur, String newpassword);
@@ -27,6 +28,7 @@ public interface AccountService {
 
     List<Utilisateur> userList();
     List<Utilisateur> juryList();
+    JuryResponse juryListByEntretien(Long idEntretien);
 
     Utilisateur findByEmail(String userEmail);
 

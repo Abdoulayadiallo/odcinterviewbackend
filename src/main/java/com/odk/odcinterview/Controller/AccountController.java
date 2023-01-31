@@ -1,8 +1,11 @@
 package com.odk.odcinterview.Controller;
 
+import com.odk.odcinterview.Model.Entretien;
 import com.odk.odcinterview.Model.Postulant;
 import com.odk.odcinterview.Model.Utilisateur;
+import com.odk.odcinterview.Payload.JuryResponse;
 import com.odk.odcinterview.Service.AccountService;
+import com.odk.odcinterview.Service.EntretienService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,8 @@ public class AccountController {
 
     @Autowired
     AccountService accountService;
+    @Autowired
+    EntretienService entretienService;
 
     private Long userImageId;
 
@@ -49,8 +54,8 @@ public class AccountController {
         }
         return new ResponseEntity<>(jurys, HttpStatus.OK);
     }
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody HashMap<String, String> request) {
+    @PostMapping("/register/{idEntretien}")
+    public ResponseEntity<?> register(@RequestBody HashMap<String, String> request,@PathVariable Long idEntretien) {
         String username = request.get("username");
         if (accountService.findByUsername(username) != null) {
             return new ResponseEntity<>("username existe", HttpStatus.CONFLICT);
@@ -64,7 +69,7 @@ public class AccountController {
         String numero = request.get("numero");
         String genre = request.get("genre");
         try {
-            Utilisateur utilisateur = accountService.saveUser(nom, prenom, email,numero,genre);
+            Utilisateur utilisateur = accountService.saveUser(nom, prenom, email,numero,genre,idEntretien);
             return new ResponseEntity<>(utilisateur, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Une erreur est survenue lors de l'incription", HttpStatus.BAD_REQUEST);
@@ -141,5 +146,14 @@ public class AccountController {
         } catch (Exception e) {
             return new ResponseEntity<>("User Picture Not Saved", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/entretien/{idEntretien}")
+    public ResponseEntity<?> juryListByEntretien(@PathVariable Long idEntretien) {
+        Entretien entretien = entretienService.readEntretienByid(idEntretien);
+        if (entretien == null) {
+            return new ResponseEntity<>("Cet entretien n existe pas.", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(accountService.juryListByEntretien(idEntretien),HttpStatus.OK);
     }
 }

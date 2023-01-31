@@ -103,10 +103,12 @@ public class PostulantServiceImpl implements PostulantService {
         //List<Participant> participants = new ArrayList<>();
         try {
             List<Postulant>  postulants = ExcelHelper.excelToPostulants(multipartFile.getInputStream());
+            final Long[] id = {0L};
             postulants.forEach(postulant -> {
+                id[0] = id[0] +1;
                 LocalDate date = LocalDate.now();
                 Date date1= new Date();
-                String numeroMatricule = "ODCI"+postulant.getId().toString()+postulant.getGenre().substring(0,1)+date.getYear();
+                String numeroMatricule = "ODCI"+ id[0] +postulant.getGenre().substring(0,1)+date.getYear();
                 Participant participant= new Participant();
                 participant.setNom(postulant.getNom());
                 participant.setPrenom(postulant.getPrenom());
@@ -193,17 +195,26 @@ public class PostulantServiceImpl implements PostulantService {
         List<Participant> participants = entretien.getParticipants();
         List<Postulant> postulantList = new ArrayList<>();
         for (Participant participant:participants){
-            Postulant postulant = postulantRepository.findPostulantByParticipant(participant);
-            postulantList.add(postulant);
-            System.out.println("-----------"+postulantList);
+
+                Postulant postulant = postulantRepository.findPostulantByParticipant(participant);
+                System.out.println("-----------"+postulant+"------------Postulant");
+                postulantList.add(postulant);
+                System.out.println("-Postulant Liste----------"+postulantList);
+
+
         }
         int nombreTotale=postulantList.size();
         NombreResponse nombreResponse = new NombreResponse();
         int nombreGenre = 0;
         for (Postulant postulant:postulantList) {
             System.out.println(postulantList);
-            if(postulant.getGenre()==genre){
+            try{
+            if(postulant.getGenre().equals(genre)){
                 nombreGenre = nombreGenre + 1;
+                System.out.println(nombreGenre);
+            }
+            }catch (Exception e){
+
             }
         }
         try {
@@ -212,7 +223,7 @@ public class PostulantServiceImpl implements PostulantService {
 
             nombreResponse.setNombreParGenre(nombreGenre);
             nombreResponse.setTotalListe(nombreTotale);
-            nombreResponse.setPourcentage(nombreGenre/nombreTotale*100);
+            nombreResponse.setPourcentage(Math.round((nombreGenre*100f)/nombreTotale));
             nombreResponse.setContenu(postulantList);
         }catch (Exception e){
             e.getMessage();

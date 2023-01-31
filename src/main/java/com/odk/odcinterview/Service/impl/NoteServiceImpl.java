@@ -73,4 +73,11 @@ public class NoteServiceImpl implements NoteService {
     public Note readNoteByid(Long id) {
         return noteRepository.findNoteById(id);
     }
+
+    @Override
+    public Note GetNoteByCritere(Long IdCritere) {
+        Critere critere = critereRepository.findCritereById(IdCritere);
+        Note note = noteRepository.findNoteByCritere(critere);
+        return note;
+    }
 }
