@@ -66,17 +66,17 @@ public class PostulantServiceImpl implements PostulantService {
     }
 
     @Override
-    public PostulantResponse readPostulants(int pageNo,int pageSize,String sortBy, String sortDir, String genre,String nomOrprenom) {
+    public PostulantResponse readPostulants(int pageNo,int pageSize,String sortBy, String sortDir, String genre,String keyword) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
         Page<Postulant> postulants;
-        if(genre == null && nomOrprenom==null)
+        if(genre == null && keyword==null)
             postulants = postulantRepository.findAll(pageable);
-        else if(genre != null && nomOrprenom == null)
+        else if(genre != null && keyword == null)
             postulants = postulantRepository.findByGenreContaining(genre, pageable);
         else
-            postulants = postulantRepository.findByNomOrPrenomContaining(nomOrprenom,nomOrprenom,pageable);
+            postulants = postulantRepository.findByKeyword(keyword,pageable);
 
         List<Postulant> postulants1 = postulants.getContent();
         PostulantResponse postulantResponse = new PostulantResponse();
@@ -87,10 +87,33 @@ public class PostulantServiceImpl implements PostulantService {
         postulantResponse.setTotalElements(postulants.getTotalElements());
         postulantResponse.setLast(postulants.isLast());
         postulantResponse.setGenre(genre);
-        postulantResponse.setNomOrprenom(nomOrprenom);
+        postulantResponse.setKeyword(keyword);
         return postulantResponse;
 
     }
+
+    @Override
+    public PostulantResponse readPostulantsBYENTRETIEN(Long idEntretien,int pageNo, int pageSize, String sortBy, String sortDir, String genre, String keyword) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+        Page<Postulant> postulants;
+        if( keyword==null)
+            postulants = postulantRepository.findAllPostulantByEntretien(idEntretien,pageable);
+        else
+            postulants = postulantRepository.findPostulantEntretien0rByKeyword(idEntretien,keyword,pageable);
+
+        List<Postulant> postulants1 = postulants.getContent();
+        PostulantResponse postulantResponse = new PostulantResponse();
+        postulantResponse.setContenu(postulants1);
+        postulantResponse.setPageNo(postulants.getNumber());
+        postulantResponse.setPageSize(postulants.getSize());
+        postulantResponse.setTotalPages(postulants.getTotalPages());
+        postulantResponse.setTotalElements(postulants.getTotalElements());
+        postulantResponse.setLast(postulants.isLast());
+        postulantResponse.setGenre(genre);
+        postulantResponse.setKeyword(keyword);
+        return postulantResponse;    }
 
     @Override
     public Postulant readPostulantByid(Long id) {
@@ -162,7 +185,9 @@ public class PostulantServiceImpl implements PostulantService {
         List<Postulant> postulantList = new ArrayList<>();
         for (Participant participant:participants){
             Postulant postulant = postulantRepository.findPostulantByParticipant(participant);
-            postulantList.add(postulant);
+            if (postulant != null){
+                postulantList.add(postulant);
+            }
         }
 
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
@@ -195,10 +220,11 @@ public class PostulantServiceImpl implements PostulantService {
         List<Participant> participants = entretien.getParticipants();
         List<Postulant> postulantList = new ArrayList<>();
         for (Participant participant:participants){
-
                 Postulant postulant = postulantRepository.findPostulantByParticipant(participant);
                 System.out.println("-----------"+postulant+"------------Postulant");
-                postulantList.add(postulant);
+                if (postulant != null){
+                    postulantList.add(postulant);
+                }
                 System.out.println("-Postulant Liste----------"+postulantList);
 
 

@@ -134,9 +134,25 @@ public class PostulantController {
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
             @RequestParam(value = "genre", required = false) String genre,
-            @RequestParam(value = "nom", required = false) String nomOrprenom
+            @RequestParam(value = "keyword", required = false) String keyword
     ) {
-        PostulantResponse postulants = postulantService.readPostulants(pageNo,pageSize,sortBy,sortDir,genre,nomOrprenom);
+        PostulantResponse postulants = postulantService.readPostulants(pageNo,pageSize,sortBy,sortDir,genre,keyword);
+        if (postulants.getContenu().isEmpty()) {
+            return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(postulants, HttpStatus.OK);
+    }
+    @GetMapping("/list/PostulantEntretien/{idEntretien}")
+    public ResponseEntity<?> getUsersListById(
+            @PathVariable Long idEntretien,
+            @RequestParam(value = "pageNo" ,defaultValue = "0",required = false) int pageNo,
+            @RequestParam(value = "pageSize" ,defaultValue = "10",required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
+            @RequestParam(value = "genre", required = false) String genre,
+            @RequestParam(value = "keyword", required = false) String keyword
+    ) {
+        PostulantResponse postulants = postulantService.readPostulantsBYENTRETIEN(idEntretien,pageNo,pageSize,sortBy,sortDir,genre,keyword);
         if (postulants.getContenu().isEmpty()) {
             return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
         }

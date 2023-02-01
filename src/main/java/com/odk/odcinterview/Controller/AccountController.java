@@ -116,7 +116,7 @@ public class AccountController {
             }
             return new ResponseEntity<>("Mots de passe modifier avec succès!", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Une erreur est survenue: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Une erreur est survenue" + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

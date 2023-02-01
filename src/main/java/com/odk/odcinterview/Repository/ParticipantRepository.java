@@ -11,6 +11,8 @@ import java.util.List;
 public interface ParticipantRepository extends JpaRepository<Participant,Long> {
     Participant findParticipantByEmail(String Email);
 
+    Participant findParticipantByStatus(String status);
+
 
     List<Participant> findParticipantByEntretien(Long id);
 }

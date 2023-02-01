@@ -86,6 +86,7 @@ public class EntretienServiceImpl implements EntretienService {
         entretienResponse.setTotalElements(entretiens.getTotalElements());
         entretienResponse.setTotalPages(entretiens.getTotalPages());
         entretienResponse.setLast(entretiens.isLast());
+        entretienResponse.setUsername(username);
         return entretienResponse;
     }
 
