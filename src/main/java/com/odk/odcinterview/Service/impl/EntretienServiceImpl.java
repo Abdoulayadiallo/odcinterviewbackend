@@ -58,6 +58,9 @@ public class EntretienServiceImpl implements EntretienService {
     public Entretien updateEntretien(Entretien entretien, Long id) {
         Entretien entretien1= entretienRepository.findEntretienById(id);
         entretien1.setEntretienNom(entretien.getEntretienNom());
+        entretien1.setDateDebut(entretien.getDateDebut());
+        entretien1.setDateFin(entretien.getDateFin());
+        entretien1.setEtat(entretien.getEtat());
         entretien1.setNombreParticipant(entretien.getNombreParticipant());
         return entretienRepository.save(entretien1);
     }
@@ -95,7 +98,7 @@ public class EntretienServiceImpl implements EntretienService {
         return entretienRepository.findEntretienById(id);
     }
 
-    @Scheduled(fixedRateString = "1000")
+    @Scheduled(fixedDelay = 1)
     public void etatEntretien(){
         List<Entretien> allEntretiens=entretienRepository.findAll();
 
@@ -114,12 +117,17 @@ public class EntretienServiceImpl implements EntretienService {
                 if (today.after(entretien.getDateDebut()) && today.before(entretien.getDateFin())) {
                     entretien.setEtat(encour);
                     entretienRepository.save(entretien);
+                    System.out.println(entretien.getEtat()  + "afficher encour");
                 }else if (today.before(entretien.getDateDebut())) {
                     entretien.setEtat(avenir);
                     entretienRepository.save(entretien);
+                    System.out.println(entretien.getEtat()  + "afficher avenir");
+
                 }else if (today.after(entretien.getDateFin())) {
                     entretien.setEtat(termine);
                     entretienRepository.save(entretien);
+                    System.out.println(entretien.getEtat()+"afficher terminé");
+
                 }
                 System.out.println(entretien);
 

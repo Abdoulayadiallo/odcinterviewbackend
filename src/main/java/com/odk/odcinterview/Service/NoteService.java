@@ -2,6 +2,7 @@ package com.odk.odcinterview.Service;
 
 import com.odk.odcinterview.Model.Critere;
 import com.odk.odcinterview.Model.Note;
+import com.odk.odcinterview.Payload.NoteResponse;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ public interface NoteService {
     List<Note> readNotes();
     Note readNoteByid(Long id);
 
-    Note GetNoteByCritere(Long IdCritere);
+    NoteResponse GetNoteByCritere(Long IdCritere,Long idJury);
 }

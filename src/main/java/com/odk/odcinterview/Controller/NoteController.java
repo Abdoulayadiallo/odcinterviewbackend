@@ -89,13 +89,13 @@ public class NoteController {
         }
         return new ResponseEntity<>(notes, HttpStatus.OK);
     }
-    @GetMapping("/critere/{idCritere}")
-    public ResponseEntity<?> getNoteByCritere(@PathVariable Long idCritere) {
+    @GetMapping("/critere/{idCritere}/{idJury}")
+    public ResponseEntity<?> getNoteByCritere(@PathVariable Long idCritere,@PathVariable Long idJury) {
         if (critereService.readCritereByid(idCritere) == null){
             return new ResponseEntity<>("Critere non trouvé.", HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(noteService.GetNoteByCritere(idCritere), HttpStatus.OK);
+        return new ResponseEntity<>(noteService.GetNoteByCritere(idCritere,idJury), HttpStatus.OK);
     }
 
 

@@ -1,6 +1,7 @@
 package com.odk.odcinterview.Service.impl;
 
 import com.odk.odcinterview.Model.*;
+import com.odk.odcinterview.Payload.NoteResponse;
 import com.odk.odcinterview.Repository.CritereRepository;
 import com.odk.odcinterview.Repository.NoteRepository;
 import com.odk.odcinterview.Repository.PostulantRepository;
@@ -24,16 +25,16 @@ public class NoteServiceImpl implements NoteService {
 
 
     @Override
-    public Note saveNote(Note note, Long critereId,Long postulantId,String Jury) {
+    public Note saveNote(Note note, Long critereId, Long postulantId, String Jury) {
         //Recuperer le Postulant par son id
         Postulant postulant = postulantRepository.findPostulantById(postulantId);
         //Recuperer le critere par son id
         Critere critere = critereRepository.findCritereById(critereId);
-        if(critere.isElimination()==true){
+        if (critere.isElimination() == true) {
             postulant.setDecisionFinal(DesisionFinal.Refuser);
         }
         //Recuperer le participant par son postulant
-        Participant p=postulant.getParticipant();
+        Participant p = postulant.getParticipant();
         // Creer d'une liste pour stocker le postulant et le jury
         List<Participant> participants = new ArrayList<>();
         //Ajout du postulant à la liste
@@ -74,10 +75,27 @@ public class NoteServiceImpl implements NoteService {
         return noteRepository.findNoteById(id);
     }
 
+
+    ////////////////////////////
     @Override
-    public Note GetNoteByCritere(Long IdCritere) {
+    public NoteResponse GetNoteByCritere(Long IdCritere,Long idJury) {
         Critere critere = critereRepository.findCritereById(IdCritere);
-        Note note = noteRepository.findNoteByCritere(critere);
-        return note;
+        Utilisateur jury = utilisateurRepository.findUtilisteurById(idJury);
+        List<Note> note = noteRepository.findNoteByCritere(critere);
+        NoteResponse noteResponse = new NoteResponse();
+
+        if (note == null) {
+            noteResponse.setNoted(false);
+        } else {
+            for(Note note1: note){
+                note1.setCritere(critere);
+                noteResponse.setNoted(true);
+                noteResponse.setContenu(note1);
+            }
+
+        }
+
+        return noteResponse;
     }
+    ////////////////////////
 }
