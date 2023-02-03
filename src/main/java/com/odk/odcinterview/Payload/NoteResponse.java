@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class NoteResponse {
     Note contenu;
-    Postulant postulant;
-    Utilisateur utilisateur;
+    String postulant;
+    String utilisateur;
     private boolean isNoted=false;
 }

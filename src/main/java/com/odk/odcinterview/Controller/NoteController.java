@@ -89,13 +89,19 @@ public class NoteController {
         }
         return new ResponseEntity<>(notes, HttpStatus.OK);
     }
-    @GetMapping("/critere/{idCritere}/{idJury}")
-    public ResponseEntity<?> getNoteByCritere(@PathVariable Long idCritere,@PathVariable Long idJury) {
+    @GetMapping("/critere/{idCritere}/{idJury}/{idPostulant}")
+    public ResponseEntity<?> getNoteByCritere(@PathVariable Long idCritere,@PathVariable Long idJury,@PathVariable Long idPostulant) {
         if (critereService.readCritereByid(idCritere) == null){
             return new ResponseEntity<>("Critere non trouvé.", HttpStatus.OK);
         }
+        if (postulantService.readPostulantByid(idPostulant) == null){
+            return new ResponseEntity<>("Postulant non trouvé.", HttpStatus.OK);
+        }
+        if (accountService.findUserById(idJury) == null){
+            return new ResponseEntity<>("Jury non trouvé.", HttpStatus.OK);
+        }
 
-        return new ResponseEntity<>(noteService.GetNoteByCritere(idCritere,idJury), HttpStatus.OK);
+        return new ResponseEntity<>(noteService.GetNoteByCritere(idCritere,idJury,idPostulant), HttpStatus.OK);
     }
 
 

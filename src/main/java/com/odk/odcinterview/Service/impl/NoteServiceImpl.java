@@ -78,21 +78,31 @@ public class NoteServiceImpl implements NoteService {
 
     ////////////////////////////
     @Override
-    public NoteResponse GetNoteByCritere(Long IdCritere,Long idJury) {
+    public NoteResponse GetNoteByCritere(Long IdCritere,Long idJury,Long idPostulant) {
         Critere critere = critereRepository.findCritereById(IdCritere);
         Utilisateur jury = utilisateurRepository.findUtilisteurById(idJury);
+        Postulant postulant= postulantRepository.findPostulantById(idPostulant);
         List<Note> note = noteRepository.findNoteByCritere(critere);
         NoteResponse noteResponse = new NoteResponse();
-
-        if (note == null) {
-            noteResponse.setNoted(false);
-        } else {
-            for(Note note1: note){
-                note1.setCritere(critere);
-                noteResponse.setNoted(true);
-                noteResponse.setContenu(note1);
+        for (Note note1:note){
+            Collection<Participant> utilisateurList = note1.getParticipants();
+            for (Participant participant:utilisateurList){
+                Postulant postulant1 = postulantRepository.findPostulantByParticipant(participant);
+                Utilisateur utilisateur = utilisateurRepository.findUtilisateurByParticipant(participant);
+                //List<Utilisateur> utilisateurList1 = new ArrayList<>();
+                //List<Postulant> postulantList = new ArrayList<>();
+                if(postulant1 != null && postulant1.equals(postulant) && utilisateur!=null && utilisateur.equals(jury)){
+                    noteResponse.setNoted(true);
+                    noteResponse.setContenu(note1);
+                    noteResponse.setPostulant(postulant1.getPrenom() + postulant1.getNom());
+                    noteResponse.setUtilisateur(utilisateur.getPrenom() + utilisateur.getNom());
+                   // postulantList.add(postulant1);
+                }else {
+                    noteResponse.setNoted(false);
+                    noteResponse.setUtilisateur(jury.getPrenom() + jury.getNom());
+                    noteResponse.setPostulant(postulant.getPrenom() + postulant.getNom());
+                }
             }
-
         }
 
         return noteResponse;

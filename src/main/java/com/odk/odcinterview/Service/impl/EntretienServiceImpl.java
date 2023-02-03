@@ -61,6 +61,7 @@ public class EntretienServiceImpl implements EntretienService {
         entretien1.setDateDebut(entretien.getDateDebut());
         entretien1.setDateFin(entretien.getDateFin());
         entretien1.setEtat(entretien.getEtat());
+        entretien1.setDescription(entretien.getDescription());
         entretien1.setNombreParticipant(entretien.getNombreParticipant());
         return entretienRepository.save(entretien1);
     }

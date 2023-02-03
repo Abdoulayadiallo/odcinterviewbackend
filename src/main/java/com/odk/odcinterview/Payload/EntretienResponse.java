@@ -19,6 +19,7 @@ public class EntretienResponse {
     private int totalPages;
     private boolean last;
     private String username;
+    private String status;
 
 
 }

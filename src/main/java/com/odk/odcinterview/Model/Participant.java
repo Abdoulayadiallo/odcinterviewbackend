@@ -24,8 +24,10 @@ public class Participant {
             joinColumns = @JoinColumn(name = "participant_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "id"))
     private Collection<Notification> notifications;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Utilisateur> utilisateurs;
+    @OneToOne
+    private Utilisateur utilisateurs;
+    @OneToOne
+    private Postulant postulant;
     @ManyToOne()
     private Entretien entretien;
 }

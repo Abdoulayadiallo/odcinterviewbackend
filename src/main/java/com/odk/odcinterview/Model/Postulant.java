@@ -27,9 +27,9 @@ public class Postulant {
     private DesisionFinal decisionFinal;
     private String commentaireFinal;
     private Date dateCreation;
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "participant_id")
-    private Participant participant;
+ //   @OneToOne(cascade=CascadeType.ALL)
+   // @JoinColumn(name = "participant_id")
+   // private Participant participant;
 
 
 }
