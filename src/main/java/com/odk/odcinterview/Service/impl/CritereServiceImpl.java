@@ -32,7 +32,7 @@ public class CritereServiceImpl implements CritereService {
         Entretien entretien = entretienRepository.findEntretienById(IdEntretien);
         List<Question> questionList= new ArrayList<>();
         questionList.add(question);
-        critere.setQuestionList(questionList);
+        critere.setQuestion(questionList);
         critere.setEntretien(entretien);
         return critereRepository.save(critere);
     }

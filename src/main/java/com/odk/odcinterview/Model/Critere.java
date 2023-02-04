@@ -20,8 +20,7 @@ public class Critere {
     private int barem;
     private boolean elimination;
     @OneToMany(mappedBy = "critere")
-    private List<Question> questionList = new ArrayList<>();
-    @ManyToOne
-    @JsonIgnore
+    private List<Question> question = new ArrayList<>();
+    @ManyToOne()
     private Entretien entretien;
 }

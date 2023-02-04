@@ -4,6 +4,7 @@ import com.odk.odcinterview.Model.*;
 import com.odk.odcinterview.Payload.NombreResponse;
 import com.odk.odcinterview.Payload.PostulantResponse;
 import com.odk.odcinterview.Repository.EntretienRepository;
+import com.odk.odcinterview.Repository.ParticipantRepository;
 import com.odk.odcinterview.Repository.PostulantRepository;
 import com.odk.odcinterview.Service.PostulantService;
 import com.odk.odcinterview.util.EmailConstructor;
@@ -29,6 +30,7 @@ public class PostulantServiceImpl implements PostulantService {
     private final EntretienRepository entretienRepository;
     private final JavaMailSender mailSender;
     private final EmailConstructor emailConstructor;
+    private final ParticipantRepository participantRepository;
 
 
     @Override
@@ -36,15 +38,12 @@ public class PostulantServiceImpl implements PostulantService {
         Entretien entretien = entretienRepository.findEntretienById(idEntretien);
         Date date = new Date();
         Participant participant= new Participant();
-        participant.setNom(postulant.getNom());
-        participant.setPrenom(postulant.getPrenom());
-        participant.setEmail(postulant.getEmail());
         participant.setStatus(Estatus.Postulant);
-        postulant.setParticipant(participant);
         postulant.setDateCreation(date);
-        List<Participant> participants= new ArrayList<>();
-        participants.add(participant);
-        entretien.setParticipants(participants);
+        participant.setPostulant(postulant);
+        //List<Participant> participants= new ArrayList<>();
+        //participants.add(participant);
+        //entretien.setParticipants(participants);
         mailSender.send(emailConstructor.constructNewPostulantEmail(postulant,entretien));
         return postulantRepository.save(postulant);
     }
@@ -133,14 +132,13 @@ public class PostulantServiceImpl implements PostulantService {
                 Date date1= new Date();
                 String numeroMatricule = "ODCI"+ id[0] +postulant.getGenre().substring(0,1)+date.getYear();
                 Participant participant= new Participant();
-                participant.setNom(postulant.getNom());
-                participant.setPrenom(postulant.getPrenom());
-                participant.setEmail(postulant.getEmail());
                 participant.setEntretien(entretien);
                 participant.setStatus(Estatus.Postulant);
-                postulant.setParticipant(participant);
+                //postulant.setParticipant(participant);
                 postulant.setNumeroMTCL(numeroMatricule);
                 postulant.setDateCreation(date1);
+                participant.setPostulant(postulant);
+                participantRepository.save(participant);
                 //participants.add(participant);
                 //System.out.println(participants);
                 //entretien.setParticipants(participants);

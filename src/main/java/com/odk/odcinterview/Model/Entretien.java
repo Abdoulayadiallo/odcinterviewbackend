@@ -21,8 +21,9 @@ public class Entretien {
     private Date dateCreation;
     private String description;
     private String nombreParticipant;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Critere> critereList;
+    @OneToMany(mappedBy = "entretien",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Critere> critere;
     @OneToMany(mappedBy = "entretien" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Participant> participants;

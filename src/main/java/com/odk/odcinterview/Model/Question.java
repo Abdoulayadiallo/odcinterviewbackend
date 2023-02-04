@@ -16,7 +16,7 @@ public class Question {
     private Long id;
     private String questionNom;
     private String type;
-    @ManyToOne
+    @ManyToOne()
     @JsonIgnore
     private Critere critere;
 }

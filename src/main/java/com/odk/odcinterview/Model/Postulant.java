@@ -1,5 +1,6 @@
 package com.odk.odcinterview.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,9 +28,10 @@ public class Postulant {
     private DesisionFinal decisionFinal;
     private String commentaireFinal;
     private Date dateCreation;
- //   @OneToOne(cascade=CascadeType.ALL)
-   // @JoinColumn(name = "participant_id")
-   // private Participant participant;
+    @OneToOne(cascade=CascadeType.ALL)
+    @JsonIgnore
+    @JoinColumn(name = "participant_id")
+    private Participant participant;
 
 
 }

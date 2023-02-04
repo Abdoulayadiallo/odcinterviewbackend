@@ -19,9 +19,6 @@ public class Note {
     @OneToOne
     @JoinColumn(name = "critere_id")
     private Critere critere;
-    @ManyToMany
-    @JoinTable(name = "Participant_note",
-            joinColumns = @JoinColumn(name = "note_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "participant_id", referencedColumnName = "id"))
-    private Collection<Participant> participants;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Participant participant;
 }

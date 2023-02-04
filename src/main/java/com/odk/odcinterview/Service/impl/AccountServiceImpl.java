@@ -43,6 +43,8 @@ public class AccountServiceImpl implements AccountService {
     private ParticipantService participantService;
     @Autowired
     private EntretienRepository entretienRepository;
+    @Autowired
+    private ParticipantRepository participantRepository;
 
     public Utilisateur saveUser(String nom, String prenom, String email, String numero, String genre,Long idEntretien) {
         Entretien entretien = entretienRepository.findEntretienById(idEntretien);
@@ -65,11 +67,13 @@ public class AccountServiceImpl implements AccountService {
         utilisateur.setRole(role);
         List<Participant> participantList = entretien.getParticipants();
         Participant participant= new Participant();
-        participant.setNom(utilisateur.getNom());
-        participant.setPrenom(utilisateur.getPrenom());
-        participant.setEmail(utilisateur.getEmail());
+//        participant.setNom(utilisateur.getNom());
+//        participant.setPrenom(utilisateur.getPrenom());
+//        participant.setEmail(utilisateur.getEmail());
         participant.setStatus(Estatus.Jury);
         participant.setEntretien(entretien);
+        participant.setUtilisateur(utilisateur);
+        participantRepository.save(participant);
         utilisateur.setParticipant(participant);
         //entretien.setParticipants(participantList);
 

@@ -68,12 +68,12 @@ public class AccountController {
         String prenom = request.get("prenom");
         String numero = request.get("numero");
         String genre = request.get("genre");
-        try {
+        //try {
             Utilisateur utilisateur = accountService.saveUser(nom, prenom, email,numero,genre,idEntretien);
             return new ResponseEntity<>(utilisateur, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Une erreur est survenue lors de l'incription", HttpStatus.BAD_REQUEST);
-        }
+        //} catch (Exception e) {
+         //   return new ResponseEntity<>("Une erreur est survenue lors de l'incription", HttpStatus.BAD_REQUEST);
+        //}
 
     }
 

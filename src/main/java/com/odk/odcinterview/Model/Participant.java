@@ -14,9 +14,6 @@ public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nom;
-    private String prenom;
-    private String email;
     @Enumerated(EnumType.STRING)
     private Estatus status;
     @ManyToMany
@@ -24,10 +21,10 @@ public class Participant {
             joinColumns = @JoinColumn(name = "participant_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "id"))
     private Collection<Notification> notifications;
-    @OneToOne
-    private Utilisateur utilisateurs;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    private Utilisateur utilisateur;
+    @OneToOne(cascade = CascadeType.ALL)
     private Postulant postulant;
-    @ManyToOne()
+    @ManyToOne
     private Entretien entretien;
 }

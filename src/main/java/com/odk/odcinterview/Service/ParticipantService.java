@@ -10,4 +10,6 @@ public interface ParticipantService {
     Participant deleteParticipant(Participant participant);
     List<Participant> readParticipants();
     Participant readParticipantByid(Long id);
+
+    Participant getParticipantByJury(Long id);
 }
