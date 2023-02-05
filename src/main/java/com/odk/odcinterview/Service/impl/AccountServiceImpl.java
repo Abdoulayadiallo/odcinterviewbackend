@@ -3,11 +3,9 @@ package com.odk.odcinterview.Service.impl;
 import com.odk.odcinterview.Model.*;
 import com.odk.odcinterview.Payload.JuryResponse;
 import com.odk.odcinterview.Repository.EntretienRepository;
-import com.odk.odcinterview.Repository.ParticipantRepository;
 import com.odk.odcinterview.Repository.RoleRepository;
 import com.odk.odcinterview.Repository.UtilisateurRepository;
 import com.odk.odcinterview.Service.AccountService;
-import com.odk.odcinterview.Service.ParticipantService;
 import com.odk.odcinterview.util.Constants;
 import com.odk.odcinterview.util.EmailConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -40,11 +38,7 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
-    private ParticipantService participantService;
-    @Autowired
     private EntretienRepository entretienRepository;
-    @Autowired
-    private ParticipantRepository participantRepository;
 
     public Utilisateur saveUser(String nom, String prenom, String email, String numero, String genre,Long idEntretien) {
         Entretien entretien = entretienRepository.findEntretienById(idEntretien);
@@ -65,19 +59,7 @@ public class AccountServiceImpl implements AccountService {
         }
         Role role = roleRepository.findByRoleName(Erole.JURY);
         utilisateur.setRole(role);
-        List<Participant> participantList = entretien.getParticipants();
-        Participant participant= new Participant();
-//        participant.setNom(utilisateur.getNom());
-//        participant.setPrenom(utilisateur.getPrenom());
-//        participant.setEmail(utilisateur.getEmail());
-        participant.setStatus(Estatus.Jury);
-        participant.setEntretien(entretien);
-        participant.setUtilisateur(utilisateur);
-        participantRepository.save(participant);
-        utilisateur.setParticipant(participant);
-        //entretien.setParticipants(participantList);
-
-        //entretienRepository.save(entretien);
+        utilisateur.setEntretien(entretien);
         utilisateurRepository.save(utilisateur);
         byte[] bytes;
         try {
@@ -194,7 +176,7 @@ public class AccountServiceImpl implements AccountService {
 
         for (Utilisateur utilisateur:utilisateurList){
             System.out.println(utilisateur+ "(------------uuuuuuuuuuuuuuuuuuuuuttttttttttttttt)");
-            if(utilisateur.getParticipant().getEntretien()==entretien) {
+            if(utilisateur.getEntretien()==entretien) {
                 juryList.add(utilisateur);
                 System.out.println(utilisateur+ "(------------juuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu)");
 

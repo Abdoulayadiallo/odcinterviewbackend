@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -31,12 +32,19 @@ public class Utilisateur {
     @Column(columnDefinition = "text")
     private String bio;
     private Date dateCreation;
-    @OneToOne()
-    @JsonIgnore
-    @JoinColumn(name = "participant_id")
-    private Participant participant;
+    @ManyToOne
+    private Entretien entretien;
     @ManyToOne(fetch = FetchType.EAGER)
     Role role;
+    @ManyToMany
+    @JoinTable(name = "Utilisateur_notification",
+            joinColumns = @JoinColumn(name = "utilisateur_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "id"))
+    private Collection<Notification> notifications;
+    @OneToMany(mappedBy = "utilisateur" ,cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Note> notes;
+
 
     public Utilisateur(Long id, String image, String nom, String prenom, String email,String numero,String genre,String password) {
         this.id=id;

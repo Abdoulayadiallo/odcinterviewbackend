@@ -143,7 +143,7 @@ public class PostulantController {
         return new ResponseEntity<>(postulants, HttpStatus.OK);
     }
     @GetMapping("/list/PostulantEntretien/{idEntretien}")
-    public ResponseEntity<?> getUsersListById(
+    public ResponseEntity<?> getPostulantListByEntretien(
             @PathVariable Long idEntretien,
             @RequestParam(value = "pageNo" ,defaultValue = "0",required = false) int pageNo,
             @RequestParam(value = "pageSize" ,defaultValue = "10",required = false) int pageSize,
@@ -158,20 +158,7 @@ public class PostulantController {
         }
         return new ResponseEntity<>(postulants, HttpStatus.OK);
     }
-    @GetMapping("/list/{idEntretien}")
-    public ResponseEntity<?> getPostulantByEntretien(
-            @PathVariable Long idEntretien,
-            @RequestParam(value = "pageNo" ,defaultValue = "0",required = false) int pageNo,
-            @RequestParam(value = "pageSize" ,defaultValue = "10",required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
-    ) {
-        PostulantResponse postulants = postulantService.getPostulantByEntretien(idEntretien,pageNo,pageSize,sortBy,sortDir);
-        if (postulants.getContenu().isEmpty()) {
-            return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
-        }
-        return new ResponseEntity<>(postulants, HttpStatus.OK);
-    }
+
     @GetMapping("/nombreGenre/{idEntretien}/{genre}")
     public ResponseEntity<?> getNombre(@PathVariable  String genre,@PathVariable Long idEntretien){
         if(entretienService.readEntretienByid(idEntretien)==null){

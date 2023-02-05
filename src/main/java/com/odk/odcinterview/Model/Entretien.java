@@ -24,9 +24,12 @@ public class Entretien {
     @OneToMany(mappedBy = "entretien",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Critere> critere;
-    @OneToMany(mappedBy = "entretien" ,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "entretien" ,cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Participant> participants;
+    private List<Utilisateur> utilisateurs;
+    @OneToMany(mappedBy = "entretien" ,cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Postulant> postulants;
     @ManyToOne
     private Etat etat;
 }

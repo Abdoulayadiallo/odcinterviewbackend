@@ -21,7 +21,7 @@ public class Role {
     @JsonIgnore
     private List<Utilisateur> utilisateurs;
 
-    public Role(Long ic, Erole roleName) {
+    public Role(Long id, Erole roleName) {
         this.id=id;
         this.roleName=roleName;
     }

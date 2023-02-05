@@ -19,6 +19,8 @@ public class Note {
     @OneToOne
     @JoinColumn(name = "critere_id")
     private Critere critere;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Participant participant;
+    @ManyToOne
+    private Postulant postulant;
+    @ManyToOne
+    private Utilisateur utilisateur;
 }

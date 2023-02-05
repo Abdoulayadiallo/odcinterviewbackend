@@ -1,13 +1,11 @@
 package com.odk.odcinterview.Service;
 
-import com.odk.odcinterview.Model.Participant;
 import com.odk.odcinterview.Model.Postulant;
 import com.odk.odcinterview.Payload.NombreResponse;
 import com.odk.odcinterview.Payload.PostulantResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
-import java.util.List;
 
 public interface PostulantService {
     Postulant savePostulant(Postulant postulant, Long idEntretien);
@@ -27,7 +25,7 @@ public interface PostulantService {
     Postulant refuserPostulant(Long idPostulant);
     boolean existsPostulantByEmail(String email);
 
-    PostulantResponse getPostulantByEntretien(Long idEntretien,int pageNo, int pageSize,String sortBy, String sortDir);
+  //  PostulantResponse getPostulantByEntretien(Long idEntretien,int pageNo, int pageSize,String sortBy, String sortDir);
 
     NombreResponse getNombre(String genre, Long idEntretien);
 

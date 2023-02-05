@@ -24,7 +24,7 @@ public class EntretienServiceImpl implements EntretienService {
     private final CritereRepository critereRepository;
     private final EtatRepository etatRepository;
     private final UtilisateurRepository utilisateurRepository;
-    private final ParticipantRepository participantRepository;
+   // private final ParticipantRepository participantRepository;
 
 
     @Override
@@ -73,16 +73,23 @@ public class EntretienServiceImpl implements EntretienService {
 
     @Override
     public EntretienResponse readEntretiens(int pageNo,int pageSize,String sortBy, String sortDir,String username) {
+        //Recuperer l' utilisateur par son id
         Utilisateur utilisateur = utilisateurRepository.findByUsername(username);
+        //Faire le trie par ordre croissant
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
+        //Une Pageable pour parametre le nombre de page,le nombre d'element d'une page,le trie
         Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
         Page<Entretien> entretiens;
+        //Si l'username est null on recupere tous les entretien;
         if(username==null)
             entretiens = entretienRepository.findAll(pageable);
         else
-            entretiens = entretienRepository.findEntretienByParticipantsContaining(utilisateur.getParticipant(),pageable);
+            //Sinon on recupere les entretiens de l'utilisateur
+
+            entretiens = entretienRepository.findEntretiensByUtilisateurs(utilisateur,pageable);
         List<Entretien> listOfEntretien = entretiens.getContent();
+        //
         EntretienResponse entretienResponse = new EntretienResponse();
         entretienResponse.setContenu(listOfEntretien);
         entretienResponse.setPageNo(entretiens.getNumber());
@@ -99,7 +106,7 @@ public class EntretienServiceImpl implements EntretienService {
         return entretienRepository.findEntretienById(id);
     }
 
-    @Scheduled(fixedDelay = 1)
+    @Scheduled(fixedDelayString = "1000")
     public void etatEntretien(){
         List<Entretien> allEntretiens=entretienRepository.findAll();
 

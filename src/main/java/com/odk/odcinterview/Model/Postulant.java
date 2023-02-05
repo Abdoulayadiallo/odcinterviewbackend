@@ -28,10 +28,11 @@ public class Postulant {
     private DesisionFinal decisionFinal;
     private String commentaireFinal;
     private Date dateCreation;
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "postulant" ,cascade = CascadeType.ALL)
     @JsonIgnore
-    @JoinColumn(name = "participant_id")
-    private Participant participant;
+    private List<Note> notes;
+    @ManyToOne
+    private Entretien entretien;
 
 
 }

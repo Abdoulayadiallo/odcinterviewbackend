@@ -1,7 +1,6 @@
 package com.odk.odcinterview.util;
 
-import com.odk.odcinterview.Model.Estatus;
-import com.odk.odcinterview.Model.Participant;
+
 import com.odk.odcinterview.Model.Postulant;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -71,7 +70,7 @@ public class ExcelHelper {
                             break;
 
                         case 3:
-                            postulant.setNumero(String.valueOf(currentCell.getNumericCellValue()));
+                            postulant.setNumero(currentCell.getStringCellValue());
                             break;
 
                         case 4:
