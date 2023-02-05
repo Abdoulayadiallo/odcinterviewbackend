@@ -1,7 +1,9 @@
 package com.odk.odcinterview.Controller;
 
+import com.odk.odcinterview.Model.Postulant;
 import com.odk.odcinterview.Model.Question;
 import com.odk.odcinterview.Model.Question;
+import com.odk.odcinterview.Payload.NombreQuestionResponse;
 import com.odk.odcinterview.Service.*;
 import com.odk.odcinterview.Service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +78,15 @@ public class QuestionController {
         }
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
+    @GetMapping("/repond/{idPostulant}")
+    public ResponseEntity<?> getNombreQuestionRepond(@PathVariable Long idPostulant) {
+        Postulant postulant = postulantService.readPostulantByid(idPostulant);
+        if (postulant == null) {
+            return new ResponseEntity<>("ce postulant n existe pas.", HttpStatus.NOT_FOUND);
+        }
+        NombreQuestionResponse nombreQuestionResponse = questionService.getNombreQuestionRepond(idPostulant);
+        return  new ResponseEntity<>(nombreQuestionResponse,HttpStatus.OK);
+    }
 
-}
+
+    }
