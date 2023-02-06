@@ -30,7 +30,7 @@ public class NoteServiceImpl implements NoteService {
         Postulant postulant = postulantRepository.findPostulantById(postulantId);
         //Recuperer le critere par son id
         Critere critere = critereRepository.findCritereById(critereId);
-        if (critere.isElimination() == true) {
+        if (critere.isElimination() == true && note.getPoint()<critere.getBarem()/2f) {
             postulant.setDecisionFinal(DesisionFinal.Refuser);
         }
         Utilisateur utilisateur = utilisateurRepository.findByUsername(Jury);

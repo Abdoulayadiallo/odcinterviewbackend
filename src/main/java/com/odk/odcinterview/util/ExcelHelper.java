@@ -70,7 +70,11 @@ public class ExcelHelper {
                             break;
 
                         case 3:
-                            postulant.setNumero(currentCell.getStringCellValue());
+                            try {
+                                postulant.setNumero(currentCell.getStringCellValue());
+                            }catch (Exception e){
+                                postulant.setNumero(String.valueOf(currentCell.getNumericCellValue()));
+                            }
                             break;
 
                         case 4:

@@ -19,8 +19,9 @@ public class Critere {
     private String critereNom;
     private int barem;
     private boolean elimination;
-    @OneToMany(mappedBy = "critere")
-    private List<Question> question = new ArrayList<>();
+    @OneToMany(mappedBy = "critere",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Question> question;
     @ManyToOne()
     private Entretien entretien;
 }

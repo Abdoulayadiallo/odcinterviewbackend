@@ -10,6 +10,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface QuestionRepository extends JpaRepository<Question,Long> {
 
@@ -17,4 +19,6 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     Question findQuestionByQuestionNom(String nom);
 
     Boolean existsQuestionByQuestionNom(String string);
+
+    List<Question> findQuestionByCritere(Critere critere);
 }

@@ -1,9 +1,11 @@
 package com.odk.odcinterview.Controller;
 
+import com.odk.odcinterview.Model.Critere;
 import com.odk.odcinterview.Model.Postulant;
 import com.odk.odcinterview.Model.Question;
 import com.odk.odcinterview.Model.Question;
 import com.odk.odcinterview.Payload.NombreQuestionResponse;
+import com.odk.odcinterview.Repository.QuestionRepository;
 import com.odk.odcinterview.Service.*;
 import com.odk.odcinterview.Service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class QuestionController {
     NoteService noteService;
     @Autowired
     PostulantService postulantService;
+    @Autowired
+    private QuestionRepository questionRepository;
 
     //methode permettant de recuperer une question
     @GetMapping("/{id}")
@@ -78,6 +82,15 @@ public class QuestionController {
         }
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
+
+    @GetMapping("/critere/{idCritere}")
+    public ResponseEntity<?> getQuestionByCritere(@PathVariable Long idCritere){
+        Critere critere = critereService.readCritereByid(idCritere);
+        if (critere == null){
+            return new ResponseEntity<>("Critere non trouvé.", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(questionRepository.findQuestionByCritere(critere),HttpStatus.OK);
+    }
     @GetMapping("/repond/{idPostulant}")
     public ResponseEntity<?> getNombreQuestionRepond(@PathVariable Long idPostulant) {
         Postulant postulant = postulantService.readPostulantByid(idPostulant);
@@ -87,6 +100,7 @@ public class QuestionController {
         NombreQuestionResponse nombreQuestionResponse = questionService.getNombreQuestionRepond(idPostulant);
         return  new ResponseEntity<>(nombreQuestionResponse,HttpStatus.OK);
     }
+
 
 
     }

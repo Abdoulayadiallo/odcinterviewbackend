@@ -64,6 +64,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public List<Question> getQuestionByCritere(Long idCritere) {
+        Critere critere = critereRepository.findCritereById(idCritere);
+        return questionRepository.findQuestionByCritere(critere);
+    }
+
+    @Override
     public NombreQuestionResponse getNombreQuestionRepond(Long idPostulant) {
         Postulant postulant = postulantRepository.findPostulantById(idPostulant);
         Entretien entretien = postulant.getEntretien();
@@ -73,7 +79,7 @@ public class QuestionServiceImpl implements QuestionService {
             List<Critere> criteresNote = new ArrayList<>();
             for (Critere critere:criteres){
                 List<Note> notes = noteRepository.findNoteByCritere(critere);
-                for (Note note: notes){
+                for(Note note: notes){
                     if(note!=null){
                         criteresNote.add(note.getCritere());
                     }

@@ -17,6 +17,5 @@ public class Question {
     private String questionNom;
     private String type;
     @ManyToOne()
-    @JsonIgnore
     private Critere critere;
 }
