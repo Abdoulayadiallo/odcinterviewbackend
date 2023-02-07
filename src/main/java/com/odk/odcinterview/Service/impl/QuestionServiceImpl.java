@@ -2,10 +2,7 @@ package com.odk.odcinterview.Service.impl;
 
 import com.odk.odcinterview.Model.*;
 import com.odk.odcinterview.Payload.NombreQuestionResponse;
-import com.odk.odcinterview.Repository.CritereRepository;
-import com.odk.odcinterview.Repository.NoteRepository;
-import com.odk.odcinterview.Repository.PostulantRepository;
-import com.odk.odcinterview.Repository.QuestionRepository;
+import com.odk.odcinterview.Repository.*;
 import com.odk.odcinterview.Service.QuestionService;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +16,18 @@ public class QuestionServiceImpl implements QuestionService {
     private final PostulantRepository postulantRepository;
     private final CritereRepository critereRepository;
     private final NoteRepository noteRepository;
+    private final EntretienRepository entretienRepository;
 
     public QuestionServiceImpl(QuestionRepository questionRepository,
                                PostulantRepository postulantRepository,
                                CritereRepository critereRepository,
-                               NoteRepository noteRepository) {
+                               NoteRepository noteRepository,
+                               EntretienRepository entretienRepository) {
         this.questionRepository = questionRepository;
         this.postulantRepository = postulantRepository;
         this.critereRepository = critereRepository;
         this.noteRepository = noteRepository;
+        this.entretienRepository = entretienRepository;
     }
 
     @Override
@@ -71,33 +71,16 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public NombreQuestionResponse getNombreQuestionRepond(Long idPostulant) {
-        Postulant postulant = postulantRepository.findPostulantById(idPostulant);
-        Entretien entretien = postulant.getEntretien();
+        List<Note> note = noteRepository.CritereNoteByPostulant(idPostulant);
         NombreQuestionResponse nombreQuestionResponse = new NombreQuestionResponse();
+        Entretien entretien = entretienRepository.findEntretienByPostulants(postulantRepository.findPostulantById(idPostulant));
         List<Critere> criteres = critereRepository.findCritereByEntretien(entretien);
-        if (!criteres.isEmpty()){
-            List<Critere> criteresNote = new ArrayList<>();
-            for (Critere critere:criteres){
-                List<Note> notes = noteRepository.findNoteByCritere(critere);
-                for(Note note: notes){
-                    if(note!=null){
-                        criteresNote.add(note.getCritere());
-                    }
-                }
-            }
-
             int nombretotal =criteres.size();
-            int nombrecriterenote =criteresNote.size();
+            int nombrecriterenote = note.size();
             nombreQuestionResponse.setContenu(criteres);
             nombreQuestionResponse.setNombreParCritereNote(nombretotal);
             nombreQuestionResponse.setTotalListe(nombrecriterenote);
             nombreQuestionResponse.setPourcentage(nombrecriterenote * 100f/nombretotal);
-        }
-        nombreQuestionResponse.setContenu(criteres);
-        nombreQuestionResponse.setNombreParCritereNote(0);
-        nombreQuestionResponse.setTotalListe(criteres.size());
-        nombreQuestionResponse.setPourcentage(0f);
-
         return nombreQuestionResponse;
     }
 }

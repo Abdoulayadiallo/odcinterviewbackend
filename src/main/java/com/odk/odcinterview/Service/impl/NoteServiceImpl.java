@@ -33,6 +33,7 @@ public class NoteServiceImpl implements NoteService {
         if (critere.isElimination() == true && note.getPoint()<critere.getBarem()/2f) {
             postulant.setDecisionFinal(DesisionFinal.Refuser);
         }
+        postulant.setNoteFinal(postulant.getNoteFinal()+note.getPoint());
         Utilisateur utilisateur = utilisateurRepository.findByUsername(Jury);
         note.setCritere(critere);
         note.setUtilisateur(utilisateur);
@@ -66,26 +67,16 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public NoteResponse GetNoteByCritere(Long IdCritere,Long idJury,Long idPostulant) {
-        Critere critere = critereRepository.findCritereById(IdCritere);
-        Utilisateur jury = utilisateurRepository.findUtilisteurById(idJury);
-        Postulant postulant= postulantRepository.findPostulantById(idPostulant);
-        List<Note> note = noteRepository.findNoteByCritere(critere);
+        Note note = noteRepository.findNOteByCritereByJuryByPostulant(IdCritere,idJury,idPostulant);
         NoteResponse noteResponse = new NoteResponse();
-        for (Note note1:note){
-                Postulant postulant1= note1.getPostulant();
-                Utilisateur utilisateur = note1.getUtilisateur();
-                if(postulant1.equals(postulant) && utilisateur.equals(jury)){
+                if(note!=null){
                     noteResponse.setNoted(true);
-                    noteResponse.setContenu(note1);
-                    noteResponse.setPostulant(postulant1.getPrenom() +" "+ postulant1.getNom());
-                    noteResponse.setUtilisateur(jury.getPrenom() +" "+ jury.getNom());
-                   // postulantList.add(postulant1);
+                    noteResponse.setContenu(note);
                 }else {
                     noteResponse.setNoted(false);
-                    noteResponse.setUtilisateur(jury.getPrenom() + jury.getNom());
-                    noteResponse.setPostulant(postulant.getPrenom() + postulant.getNom());
+                    noteResponse.setContenu(note);
+
                 }
-            }
 
         return noteResponse;
     }
