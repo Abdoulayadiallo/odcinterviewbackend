@@ -88,8 +88,9 @@ public class PostulantServiceImpl implements PostulantService {
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
         Page<Postulant> postulants;
+        Entretien entretien = entretienRepository.findEntretienById(idEntretien);
         if( keyword==null)
-            postulants = postulantRepository.findPostulantByEntretien(idEntretien,pageable);
+            postulants = postulantRepository.findPostulantByEntretien(entretien,pageable);
         else
             postulants = postulantRepository.findPostulantEntretien0rByKeyword(idEntretien,keyword,pageable);
 
@@ -189,5 +190,29 @@ public class PostulantServiceImpl implements PostulantService {
         }
 
         return nombreResponse;
+    }
+
+    @Override
+    public PostulantResponse findPostulantsByUtilisateur(Long idEntretien, Long idUtilisateur,int pageNo, int pageSize, String sortBy, String sortDir, String keyword) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+        Page<Postulant> postulants;
+        Entretien entretien = entretienRepository.findEntretienById(idEntretien);
+        if( keyword==null)
+            postulants = postulantRepository.findPostulantEntretienAndUtilisateur(idEntretien,idUtilisateur,pageable);
+        else
+            postulants = postulantRepository.findPostulantEntretienAndUtilisateurOrKeyword(idEntretien,idUtilisateur,keyword,pageable);
+
+        List<Postulant> postulants1 = postulants.getContent();
+        PostulantResponse postulantResponse = new PostulantResponse();
+        postulantResponse.setContenu(postulants1);
+        postulantResponse.setPageNo(postulants.getNumber());
+        postulantResponse.setPageSize(postulants.getSize());
+        postulantResponse.setTotalPages(postulants.getTotalPages());
+        postulantResponse.setTotalElements(postulants.getTotalElements());
+        postulantResponse.setLast(postulants.isLast());
+        postulantResponse.setKeyword(keyword);
+        return postulantResponse;
     }
 }

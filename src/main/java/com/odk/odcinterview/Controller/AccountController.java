@@ -149,11 +149,17 @@ public class AccountController {
     }
 
     @GetMapping("/entretien/{idEntretien}")
-    public ResponseEntity<?> juryListByEntretien(@PathVariable Long idEntretien) {
+    public ResponseEntity<?> juryListByEntretien(
+            @PathVariable Long idEntretien,
+            @RequestParam(value = "pageNo" ,defaultValue = "0",required = false) int pageNo,
+            @RequestParam(value = "pageSize" ,defaultValue = "10",required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
+            @RequestParam(value = "keyword", required = false) String keyword) {
         Entretien entretien = entretienService.readEntretienByid(idEntretien);
         if (entretien == null) {
             return new ResponseEntity<>("Cet entretien n existe pas.", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(accountService.juryListByEntretien(idEntretien),HttpStatus.OK);
+        return new ResponseEntity<>(accountService.juryListByEntretien(idEntretien,pageNo,pageSize,sortBy,sortDir,keyword),HttpStatus.OK);
     }
 }

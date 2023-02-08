@@ -13,9 +13,14 @@ import java.util.List;
 @NoArgsConstructor
 public class JuryResponse {
     List<Utilisateur> contenu;
+    private int pageNo;
+    private int pageSize;
+    private long totalElements;
+    private int totalPages;
+    private boolean last;
+    private String Keyword;
     private float pourcentage;
     private int nombreParGenre;
     private int TotalListe;
-
 
 }

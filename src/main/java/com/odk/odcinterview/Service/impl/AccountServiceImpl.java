@@ -11,6 +11,10 @@ import com.odk.odcinterview.util.EmailConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -163,30 +167,26 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public JuryResponse juryListByEntretien(Long idEntretien) {
-        Entretien entretien = entretienRepository.findEntretienById(idEntretien);
-        Role juryRole = roleRepository.findByRoleName(Erole.JURY);
-        List<Utilisateur> utilisateurList = utilisateurRepository.findUtilisteurByRole(juryRole);
-        System.out.println(entretien + "(------------entretien)");
-        System.out.println(utilisateurList + "(------------uuuuuuuuuuuuuuuuuuuuu)");
+    public JuryResponse juryListByEntretien(Long idEntretien,int pageNo, int pageSize, String sortBy, String sortDir, String keyword) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+        Page<Utilisateur> utilisateurs;
+        if( keyword == null)
+            utilisateurs = utilisateurRepository.findUtilisateurByEntretien(idEntretien,pageable);
+        else
+            utilisateurs = utilisateurRepository.findUtilisateurEntretien0rByKeyword(idEntretien,keyword,pageable);
 
-
-
-        List<Utilisateur> juryList = new ArrayList<>();
-
-        for (Utilisateur utilisateur:utilisateurList){
-            System.out.println(utilisateur+ "(------------uuuuuuuuuuuuuuuuuuuuuttttttttttttttt)");
-            if(utilisateur.getEntretien()==entretien) {
-                juryList.add(utilisateur);
-                System.out.println(utilisateur+ "(------------juuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu)");
-
-            }
-        }
-        JuryResponse juryResponses = new JuryResponse();
-
-        juryResponses.setContenu(juryList);
-        juryResponses.setTotalListe(juryList.size());
-        return juryResponses;
+        List<Utilisateur> jurylist = utilisateurs.getContent();
+        JuryResponse juryResponse = new JuryResponse();
+        juryResponse.setContenu(jurylist);
+        juryResponse.setPageNo(utilisateurs.getNumber());
+        juryResponse.setPageSize(utilisateurs.getSize());
+        juryResponse.setTotalPages(utilisateurs.getTotalPages());
+        juryResponse.setTotalElements(utilisateurs.getTotalElements());
+        juryResponse.setLast(utilisateurs.isLast());
+        juryResponse.setKeyword(keyword);
+        return juryResponse;
     }
 
     @Override
