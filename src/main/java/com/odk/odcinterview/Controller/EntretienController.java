@@ -98,5 +98,19 @@ public class EntretienController {
         return new ResponseEntity<>(entretiens, HttpStatus.OK);
     }
 
+    @PostMapping("/photo/upload/{id}")
+    public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile multipartFile,@PathVariable Long id) {
+        Entretien entretien = entretienService.readEntretienByid(id);
+        if (entretien == null) {
+            return new ResponseEntity<>("cet entretien n existe pas.", HttpStatus.NOT_FOUND);
+        }
+        try {
+            entretienService.saveEntretienImage(multipartFile, entretien.getEntretienNom());
+            return new ResponseEntity<>("Entretien image enregistrer!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Entretien image non enregistrer", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 }

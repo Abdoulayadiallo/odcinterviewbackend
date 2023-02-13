@@ -5,6 +5,7 @@ import com.odk.odcinterview.Payload.EntretienResponse;
 import com.odk.odcinterview.Payload.PostulantResponse;
 import com.odk.odcinterview.Repository.*;
 import com.odk.odcinterview.Service.EntretienService;
+import com.odk.odcinterview.util.Constants;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +13,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -146,6 +152,19 @@ public class EntretienServiceImpl implements EntretienService {
 
         //System.err.println("helllle");
 
+    }
+    @Override
+    public String saveEntretienImage(MultipartFile multipartFile, String entretienImage) {
+        byte[] bytes;
+        try {
+            Files.deleteIfExists(Paths.get(Constants.INTERVIEW_FOLDER + "/" + entretienImage + ".png"));
+            bytes = multipartFile.getBytes();
+            Path path = Paths.get(Constants.INTERVIEW_FOLDER + entretienImage + ".png");
+            Files.write(path, bytes);
+            return "Interview picture saved to server";
+        } catch (IOException e) {
+            return "Interview picture Saved";
+        }
     }
 
 }
