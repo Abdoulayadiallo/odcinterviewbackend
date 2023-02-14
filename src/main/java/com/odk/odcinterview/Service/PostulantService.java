@@ -28,6 +28,7 @@ public interface PostulantService {
   //  PostulantResponse getPostulantByEntretien(Long idEntretien,int pageNo, int pageSize,String sortBy, String sortDir);
 
     NombreResponse getNombre(String genre, Long idEntretien);
+    NombreResponse getNombreAllPostulant(String genre);
 
     PostulantResponse findPostulantsByUtilisateur(Long idEntretien, Long idUtilisateur,int pageNo, int pageSize, String sortBy, String sortDir, String keyword);
 

@@ -78,7 +78,7 @@ public class EntretienServiceImpl implements EntretienService {
     }
 
     @Override
-    public EntretienResponse readEntretiens(int pageNo,int pageSize,String sortBy, String sortDir,String username) {
+    public EntretienResponse readEntretiens(int pageNo,int pageSize,String sortBy, String sortDir,String username,String nomEntretien) {
         //Recuperer l' utilisateur par son id
         Utilisateur utilisateur = utilisateurRepository.findByUsername(username);
         //Faire le trie par ordre croissant
@@ -88,12 +88,13 @@ public class EntretienServiceImpl implements EntretienService {
         Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
         Page<Entretien> entretiens;
         //Si l'username est null on recupere tous les entretien;
-        if(username==null)
-            entretiens = entretienRepository.findAll(pageable);
-        else
+        if(nomEntretien != null && username==null)
+            entretiens = entretienRepository.findEntretiensByEntretienNomContaining(nomEntretien,pageable);
+        else if(username != null && nomEntretien==null)
             //Sinon on recupere les entretiens de l'utilisateur
-
             entretiens = entretienRepository.findEntretiensByUtilisateurs(utilisateur,pageable);
+        else
+            entretiens = entretienRepository.findAll(pageable);
         List<Entretien> listOfEntretien = entretiens.getContent();
         //
         EntretienResponse entretienResponse = new EntretienResponse();

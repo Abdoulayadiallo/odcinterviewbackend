@@ -27,7 +27,7 @@ public interface AccountService {
     Utilisateur findByUsername(String username);
 
     List<Utilisateur> userList();
-    List<Utilisateur> juryList();
+    JuryResponse juryList(int pageNo, int pageSize, String sortBy, String sortDir, String keyword);
     JuryResponse juryListByEntretien(Long idEntretien,int pageNo, int pageSize, String sortBy, String sortDir, String keyword);
 
     Utilisateur findByEmail(String userEmail);

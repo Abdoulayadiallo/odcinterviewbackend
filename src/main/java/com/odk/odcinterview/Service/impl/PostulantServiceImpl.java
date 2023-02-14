@@ -191,6 +191,37 @@ public class PostulantServiceImpl implements PostulantService {
 
         return nombreResponse;
     }
+    @Override
+    public NombreResponse getNombreAllPostulant(String genre) {
+        List<Postulant> postulants = postulantRepository.findAll();
+        int nombreTotale=postulants.size();
+        NombreResponse nombreResponse = new NombreResponse();
+        int nombreGenre = 0;
+        for (Postulant postulant:postulants) {
+            System.out.println(postulant);
+            try{
+            if(postulant.getGenre().equals(genre)){
+                nombreGenre = nombreGenre + 1;
+                System.out.println(nombreGenre);
+            }
+            }catch (Exception e){
+
+            }
+        }
+        try {
+            System.out.println(nombreTotale);
+            System.out.println(nombreGenre);
+
+            nombreResponse.setNombreParGenre(nombreGenre);
+            nombreResponse.setTotalListe(nombreTotale);
+            nombreResponse.setPourcentage(Math.round((nombreGenre*100f)/nombreTotale));
+            nombreResponse.setContenu(postulants);
+        }catch (Exception e){
+            e.getMessage();
+        }
+
+        return nombreResponse;
+    }
 
     @Override
     public PostulantResponse findPostulantsByUtilisateur(Long idEntretien, Long idUtilisateur,int pageNo, int pageSize, String sortBy, String sortDir, String keyword) {

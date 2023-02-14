@@ -18,7 +18,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur,Long> {
     Utilisateur findByUsername(String username);
     boolean existsByUsername(String username);
     Utilisateur findUtilisteurById(Long id);
-    List<Utilisateur> findUtilisteurByRole(Role role);
+    Page<Utilisateur> findUtilisteurByRole(Role role,Pageable pageable);
     Utilisateur findByEmail(String userEmail);
     List<Utilisateur> findByUsernameContaining(String username);
     @Query(value = "SELECT utilisateur.* FROM utilisateur,entretien WHERE utilisateur.role_id = 1 AND entretien.id =:idEntretien",nativeQuery = true)
@@ -26,5 +26,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur,Long> {
 
     @Query(value = "select distinct utilisateur.* from  utilisateur,entretien WHERE  (utilisateur.role_id = 1 AND utilisateur.entretien_id=:x) AND (utilisateur.email like %:keyword% or utilisateur.nom like %:keyword% or utilisateur.prenom like %:keyword% or utilisateur.numero like %:keyword%)", nativeQuery = true)
     Page<Utilisateur> findUtilisateurEntretien0rByKeyword(@Param("x") Long id, @RequestParam(value = "keyword", required = false) String keyword, Pageable pageable);
+    @Query(value = "select distinct utilisateur.* from  utilisateur,entretien WHERE  utilisateur.role_id = 1 AND (utilisateur.email like %:keyword% or utilisateur.nom like %:keyword% or utilisateur.prenom like %:keyword% or utilisateur.numero like %:keyword% or utilisateur.username like %:keyword%)", nativeQuery = true)
+    Page<Utilisateur> findAllJUryByKeyword(@RequestParam(value = "keyword", required = false) String keyword, Pageable pageable);
 
 }

@@ -47,9 +47,15 @@ public class AccountController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
     @GetMapping("/jurylist")
-    public ResponseEntity<?> getJuryList() {
-        List<Utilisateur> jurys = accountService.juryList();
-        if (jurys.isEmpty()) {
+    public ResponseEntity<?> getJuryList(
+            @RequestParam(value = "pageNo" ,defaultValue = "0",required = false) int pageNo,
+            @RequestParam(value = "pageSize" ,defaultValue = "10",required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
+            @RequestParam(value = "keyword", required = false) String keyword
+    ) {
+        JuryResponse jurys = accountService.juryList(pageNo,pageSize,sortBy,sortDir,keyword);
+        if (jurys==null) {
             return new ResponseEntity<>("Liste jury vide.", HttpStatus.OK);
         }
         return new ResponseEntity<>(jurys, HttpStatus.OK);
@@ -68,12 +74,12 @@ public class AccountController {
         String prenom = request.get("prenom");
         String numero = request.get("numero");
         String genre = request.get("genre");
-        //try {
+        try {
             Utilisateur utilisateur = accountService.saveUser(nom, prenom, email,numero,genre,idEntretien);
             return new ResponseEntity<>(utilisateur, HttpStatus.OK);
-        //} catch (Exception e) {
-         //   return new ResponseEntity<>("Une erreur est survenue lors de l'incription", HttpStatus.BAD_REQUEST);
-        //}
+        } catch (Exception e) {
+           return new ResponseEntity<>("Une erreur est survenue lors de l'incription", HttpStatus.BAD_REQUEST);
+        }
 
     }
 

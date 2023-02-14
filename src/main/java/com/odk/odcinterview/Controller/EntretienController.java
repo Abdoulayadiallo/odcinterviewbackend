@@ -89,9 +89,10 @@ public class EntretienController {
             @RequestParam(value = "pageSize" ,defaultValue = "10",required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
-            @RequestParam(value = "username", required = false) String username
+            @RequestParam(value = "username", required = false) String username,
+            @RequestParam(value = "keyword", required = false) String keyword
     ) {
-        EntretienResponse entretiens = entretienService.readEntretiens(pageNo,pageSize,sortBy,sortDir,username);
+        EntretienResponse entretiens = entretienService.readEntretiens(pageNo,pageSize,sortBy,sortDir,username,keyword);
         if (entretiens.getTotalElements()==0){
             return new ResponseEntity<>("Pas encore d'entretiens.", HttpStatus.OK);
         }

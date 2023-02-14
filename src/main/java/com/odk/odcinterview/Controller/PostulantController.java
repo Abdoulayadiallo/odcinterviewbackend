@@ -185,5 +185,10 @@ public class PostulantController {
         NombreResponse nombreResponse = postulantService.getNombre(genre,idEntretien);
         return new ResponseEntity<>(nombreResponse,HttpStatus.OK);
     }
+    @GetMapping("/nombreGenre/{genre}")
+    public ResponseEntity<?> getNombreAllPostulant(@PathVariable  String genre){
+        NombreResponse nombreResponse = postulantService.getNombreAllPostulant(genre);
+        return new ResponseEntity<>(nombreResponse,HttpStatus.OK);
+    }
 
 }

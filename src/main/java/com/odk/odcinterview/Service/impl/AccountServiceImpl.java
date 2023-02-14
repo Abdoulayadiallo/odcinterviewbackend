@@ -161,9 +161,26 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Utilisateur> juryList() {
+    public JuryResponse juryList(int pageNo, int pageSize, String sortBy, String sortDir, String keyword) {
         Role juryrole = roleRepository.findByRoleName(Erole.JURY);
-        return utilisateurRepository.findUtilisteurByRole(juryrole);
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+        Page<Utilisateur> utilisateurs;
+        if( keyword == null)
+            utilisateurs = utilisateurRepository.findUtilisteurByRole(juryrole,pageable);
+        else
+            utilisateurs = utilisateurRepository.findAllJUryByKeyword(keyword,pageable);
+        List<Utilisateur> jurylist = utilisateurs.getContent();
+        JuryResponse juryResponse = new JuryResponse();
+        juryResponse.setContenu(jurylist);
+        juryResponse.setPageNo(utilisateurs.getNumber());
+        juryResponse.setPageSize(utilisateurs.getSize());
+        juryResponse.setTotalPages(utilisateurs.getTotalPages());
+        juryResponse.setTotalElements(utilisateurs.getTotalElements());
+        juryResponse.setLast(utilisateurs.isLast());
+        juryResponse.setKeyword(keyword);
+        return juryResponse;
     }
 
     @Override
