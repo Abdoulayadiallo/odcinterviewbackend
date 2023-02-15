@@ -12,6 +12,7 @@ import com.odk.odcinterview.Service.EtatService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.MailException;
@@ -20,14 +21,16 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.mail.internet.MimeMessage;
 import java.io.InputStream;
 import java.util.ArrayList;
 
 @SpringBootApplication
-public class OdcInterviewApplication {
+public class OdcInterviewApplication extends SpringBootServletInitializer {
     private final RoleRepository roleRepository;
     private final UtilisateurRepository utilisateurRepository;
     private final EtatRepository etatRepository;
@@ -48,12 +51,13 @@ public class OdcInterviewApplication {
     public static void main(String[] args) {
         SpringApplication.run(OdcInterviewApplication.class, args);
     }
+
     @Configuration
     public class WebConfig implements WebMvcConfigurer {
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
             registry.addResourceHandler("/**")
-                    .addResourceLocations("classpath:/static/","classpath:/image/","classpath:/temp/")
+                    .addResourceLocations("classpath:/static/","classpath:/image/")
                     .setCachePeriod(0);
         }
     }
@@ -79,4 +83,5 @@ public class OdcInterviewApplication {
             }
         };
     };
+
 }
