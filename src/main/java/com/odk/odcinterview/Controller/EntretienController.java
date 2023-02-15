@@ -47,7 +47,7 @@ public class EntretienController {
     //methode permettant d'ajouter un entretien avec son critere
 
 
-    @PostMapping("/add/")
+    @PostMapping("/add")
     public ResponseEntity<?> addEntretien(@RequestBody Entretien entretien) {
 //        Critere critere = critereService.readCritereByid(idCritere);
 //        if(critere == null){
@@ -99,14 +99,14 @@ public class EntretienController {
         return new ResponseEntity<>(entretiens, HttpStatus.OK);
     }
 
-    @PostMapping("/photo/upload/{id}")
-    public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile multipartFile,@PathVariable Long id) {
-        Entretien entretien = entretienService.readEntretienByid(id);
-        if (entretien == null) {
-            return new ResponseEntity<>("cet entretien n existe pas.", HttpStatus.NOT_FOUND);
-        }
+    @PostMapping("/photo/upload/{entretienNom}")
+    public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile multipartFile,@PathVariable String entretienNom) {
+       // Entretien entretien = entretienService.readEntretienByid(id);
+       // if (entretien == null) {
+        //    return new ResponseEntity<>("cet entretien n existe pas.", HttpStatus.NOT_FOUND);
+        //}
         try {
-            entretienService.saveEntretienImage(multipartFile, entretien.getEntretienNom());
+            entretienService.saveEntretienImage(multipartFile, entretienNom);
             return new ResponseEntity<>("Entretien image enregistrer!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Entretien image non enregistrer", HttpStatus.BAD_REQUEST);

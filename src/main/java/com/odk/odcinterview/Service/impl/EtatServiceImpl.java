@@ -20,6 +20,7 @@ public class EtatServiceImpl implements EtatService {
         return etatRepository.save(etat);
     }
 
+
     @Override
     public List<Etat> GetAll() {
         return etatRepository.findAll();

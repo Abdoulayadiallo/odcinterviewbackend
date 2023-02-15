@@ -32,11 +32,7 @@ public class EntretienServiceImpl implements EntretienService {
     private final UtilisateurRepository utilisateurRepository;
    // private final ParticipantRepository participantRepository;
 
-
-    @Override
-    public Entretien saveEntretien(Entretien entretien) {
-        //Critere critere = critereRepository.findCritereById(idCritere);
-        //
+    public void creerEtatselonDate(Entretien entretien){
         Etat encour=etatRepository.findByStatus("EN COUR");
         Etat termine=etatRepository.findByStatus("TERMINE");
         Etat avenir=etatRepository.findByStatus("A VENIR");
@@ -56,7 +52,12 @@ public class EntretienServiceImpl implements EntretienService {
             entretien.setEtat(termine);
             entretienRepository.save(entretien);
         }
-
+    }
+    @Override
+    public Entretien saveEntretien(Entretien entretien) {
+        //Critere critere = critereRepository.findCritereById(idCritere);
+        //
+        creerEtatselonDate(entretien);
         return entretienRepository.save(entretien);
     }
 
@@ -66,9 +67,9 @@ public class EntretienServiceImpl implements EntretienService {
         entretien1.setEntretienNom(entretien.getEntretienNom());
         entretien1.setDateDebut(entretien.getDateDebut());
         entretien1.setDateFin(entretien.getDateFin());
-        entretien1.setEtat(entretien.getEtat());
         entretien1.setDescription(entretien.getDescription());
         entretien1.setNombreParticipant(entretien.getNombreParticipant());
+        creerEtatselonDate(entretien1);
         return entretienRepository.save(entretien1);
     }
 
