@@ -103,6 +103,15 @@ public class NoteController {
 
         return new ResponseEntity<>(noteService.GetNoteByCritere(idCritere,idJury,idPostulant), HttpStatus.OK);
     }
+    @GetMapping("/postulant/{idPostulant}")
+    public ResponseEntity<?> getNoteByPostulant(@PathVariable Long idPostulant) {
+
+        if (postulantService.readPostulantByid(idPostulant) == null){
+            return new ResponseEntity<>("Postulant non trouvé.", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(noteService.GetNotePostulant(idPostulant), HttpStatus.OK);
+    }
 
 
 

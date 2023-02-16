@@ -80,4 +80,11 @@ public class NoteServiceImpl implements NoteService {
 
         return noteResponse;
     }
+
+    @Override
+    public List<Note> GetNotePostulant(Long idPostulant) {
+        List<Note> note = noteRepository.findNoteByPostulant(idPostulant);
+    return note;
+
+    }
 }

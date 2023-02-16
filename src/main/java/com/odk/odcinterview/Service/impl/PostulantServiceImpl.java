@@ -134,8 +134,9 @@ public class PostulantServiceImpl implements PostulantService {
     }
 
     @Override
-    public ByteArrayInputStream ExportPostulant() {
-        List<Postulant> postulants = postulantRepository.findAll();
+    public ByteArrayInputStream ExportPostulant(Long idEntretien) {
+        Entretien entretien = entretienRepository.findEntretienById(idEntretien);
+        List<Postulant> postulants = postulantRepository.findPostulantByEntretien(entretien);
         ByteArrayInputStream inputStream = ExcelHelper.postulantsToExcel(postulants);
         return inputStream;
     }

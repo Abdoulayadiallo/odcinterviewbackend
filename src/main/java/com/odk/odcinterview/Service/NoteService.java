@@ -14,4 +14,5 @@ public interface NoteService {
     Note readNoteByid(Long id);
 
     NoteResponse GetNoteByCritere(Long IdCritere,Long idJury,Long idPostulant);
+    List<Note> GetNotePostulant(Long idPostulant);
 }

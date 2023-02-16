@@ -18,7 +18,7 @@ public interface PostulantService {
 
     void ImportPostulant(MultipartFile multipartFile,Long idEntretien);
 
-    ByteArrayInputStream ExportPostulant();
+    ByteArrayInputStream ExportPostulant(Long idEntretien);
 
     Postulant validerPostulant(Long idPostulant);
 

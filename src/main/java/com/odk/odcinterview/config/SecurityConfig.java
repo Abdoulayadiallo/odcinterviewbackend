@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	private static final String[] PUBLIC_MATCHERS = {"/utilisateur/login", "postulant/list","/utilisateur/register**/**","/utilisateur/role", "/utilisateur/resetPassword/**", "/image/**","/entretien/download/**"};
+	private static final String[] PUBLIC_MATCHERS = {"/utilisateur/login", "postulant/list","/utilisateur/register**/**","/utilisateur/role", "/utilisateur/resetPassword/**", "/image/**","/postulant/download/**"};
 //	private static final String[] PUBLIC_MATCHERS = { "/**" };
 	
 	@Autowired

@@ -93,9 +93,9 @@ public class EntretienController {
             @RequestParam(value = "keyword", required = false) String keyword
     ) {
         EntretienResponse entretiens = entretienService.readEntretiens(pageNo,pageSize,sortBy,sortDir,username,keyword);
-        if (entretiens.getTotalElements()==0){
-            return new ResponseEntity<>("Pas encore d'entretiens.", HttpStatus.OK);
-        }
+        //if (entretiens.getTotalElements()==0){
+         //   return new ResponseEntity<>("Pas encore d'entretiens.", HttpStatus.OK);
+        //}
         return new ResponseEntity<>(entretiens, HttpStatus.OK);
     }
 

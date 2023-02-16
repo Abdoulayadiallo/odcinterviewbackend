@@ -18,6 +18,7 @@ import java.util.List;
 public class ExcelHelper {
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] HEADERs = {"Nom", "Prenom", "Email","Numero","Genre","Decision final","Note final","Rang","Numero matricule","Resultat final"};
+    static String[] HEADERExports = {"Id","Nom", "Prenom", "Email","Numero","Genre","Decision final","Note final","Rang","Numero matricule","Resultat final"};
     static String SHEET = "Postulant";
 
     public static boolean hasExcelFormat(MultipartFile file) {
@@ -107,26 +108,32 @@ public class ExcelHelper {
             // Header
             Row headerRow = sheet.createRow(0);
 
-            for (int col = 0; col < HEADERs.length; col++) {
+            for (int col = 0; col < HEADERExports.length; col++) {
                 Cell cell = headerRow.createCell(col);
-                cell.setCellValue(HEADERs[col]);
+                cell.setCellValue(HEADERExports[col]);
             }
 
             int rowIdx = 1;
             for (Postulant postulant : postulants) {
                 Row row = sheet.createRow(rowIdx++);
+                try {
+                    row.createCell(0).setCellValue(postulant.getId());
+                    row.createCell(1).setCellValue(postulant.getNom());
+                    row.createCell(2).setCellValue(postulant.getPrenom());
+                    row.createCell(3).setCellValue(postulant.getEmail());
+                    row.createCell(4).setCellValue(postulant.getNumero());
+                    row.createCell(5).setCellValue(postulant.getGenre());
+                    row.createCell(6).setCellValue(postulant.getDecisionFinal().toString());
+                    row.createCell(7).setCellValue(postulant.getNoteFinal());
+                    row.createCell(8).setCellValue(postulant.getRang());
+                    row.createCell(9).setCellValue(postulant.getNumeroMTCL());
+                    row.createCell(10).setCellValue(postulant.getResultatFinal());
 
-                row.createCell(0).setCellValue(postulant.getId());
-                row.createCell(1).setCellValue(postulant.getNom());
-                row.createCell(2).setCellValue(postulant.getPrenom());
-                row.createCell(3).setCellValue(postulant.getEmail());
-                row.createCell(4).setCellValue(postulant.getNumero());
-                row.createCell(5).setCellValue(postulant.getGenre());
-                row.createCell(6).setCellValue(postulant.getDecisionFinal().ordinal());
-                row.createCell(7).setCellValue(postulant.getNoteFinal());
-                row.createCell(8).setCellValue(postulant.getRang());
-                row.createCell(9).setCellValue(postulant.getNumeroMTCL());
-                row.createCell(10).setCellValue(postulant.getResultatFinal());
+                }catch (Exception e){
+
+                }
+
+
 
 
             }

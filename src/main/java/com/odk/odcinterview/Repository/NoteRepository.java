@@ -20,6 +20,11 @@ public interface NoteRepository extends JpaRepository<Note,Long> {
 //    List<Note> findNoteByUtilsateur(Utilisateur utilisateur);
     @Query(value = "SELECT * FROM note WHERE note.utilisateur_id=:idJury AND note.postulant_id=:idPostulant AND note.critere_id=:idCritere",nativeQuery = true)
     Note findNOteByCritereByJuryByPostulant(@Param("idCritere") Long idCritere,@Param("idJury") Long idjury,@Param("idPostulant") Long idPodtulant);
+
+    @Query(value = "SELECT * FROM note WHERE note.postulant_id=:idPostulant",nativeQuery = true)
+    List<Note> findNoteByPostulant(@Param("idPostulant") Long idPodtulant);
+
+
     @Query(value = "SELECT note.* FROM note,critere WHERE note.postulant_id =:idPostulant AND note.critere_id = critere.id",nativeQuery = true)
     List<Note> CritereNoteByPostulant(@Param("idPostulant") Long id);
 }

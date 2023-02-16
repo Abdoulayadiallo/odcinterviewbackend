@@ -33,9 +33,9 @@ public class AccountController {
     @GetMapping("/list")
     public ResponseEntity<?> getUsersList() {
         List<Utilisateur> users = accountService.userList();
-        if (users.isEmpty()) {
-            return new ResponseEntity<>("Utilisateurs non trouvé.", HttpStatus.OK);
-        }
+        //if (users.isEmpty()) {
+        //    return new ResponseEntity<>("Utilisateurs non trouvé.", HttpStatus.OK);
+        //}
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
     @GetMapping("/{username}")
@@ -55,9 +55,9 @@ public class AccountController {
             @RequestParam(value = "keyword", required = false) String keyword
     ) {
         JuryResponse jurys = accountService.juryList(pageNo,pageSize,sortBy,sortDir,keyword);
-        if (jurys==null) {
-            return new ResponseEntity<>("Liste jury vide.", HttpStatus.OK);
-        }
+        //if (jurys==null) {
+        //    return new ResponseEntity<>("Liste jury vide.", HttpStatus.OK);
+        //}
         return new ResponseEntity<>(jurys, HttpStatus.OK);
     }
     @PostMapping("/register/{idEntretien}")

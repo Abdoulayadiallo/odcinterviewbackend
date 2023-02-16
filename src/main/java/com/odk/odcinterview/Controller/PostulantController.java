@@ -54,11 +54,12 @@ public class PostulantController {
     }
 
     // Export de la liste des postulants
-    @GetMapping("/download")
-    public ResponseEntity<Resource> getFile() {
+    @GetMapping("/download/{idEntretien}")
+    public ResponseEntity<Resource> getFile(@PathVariable Long idEntretien) {
+        Entretien entretien = entretienService.readEntretienByid(idEntretien);
         Date date = new Date();
-        String filename = "postulant" + date.toString() + ".xlsx";
-        InputStreamResource file = new InputStreamResource(postulantService.ExportPostulant());
+        String filename = "postulant_de_"+entretien.getEntretienNom()+ date.toString() + ".xlsx";
+        InputStreamResource file = new InputStreamResource(postulantService.ExportPostulant(idEntretien));
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
@@ -137,9 +138,9 @@ public class PostulantController {
             @RequestParam(value = "keyword", required = false) String keyword
     ) {
         PostulantResponse postulants = postulantService.readPostulants(pageNo,pageSize,sortBy,sortDir,genre,keyword);
-        if (postulants.getContenu().isEmpty()) {
-            return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
-        }
+        //if (postulants.getContenu().isEmpty()) {
+        //    return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
+        //}
         return new ResponseEntity<>(postulants, HttpStatus.OK);
     }
     @GetMapping("/list/PostulantEntretien/{idEntretien}")
@@ -153,9 +154,9 @@ public class PostulantController {
             @RequestParam(value = "keyword", required = false) String keyword
     ) {
         PostulantResponse postulants = postulantService.readPostulantsBYENTRETIEN(idEntretien,pageNo,pageSize,sortBy,sortDir,genre,keyword);
-        if (postulants.getContenu().isEmpty()) {
-            return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
-        }
+        //if (postulants.getContenu().isEmpty()) {
+        //    return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
+        //}
         return new ResponseEntity<>(postulants, HttpStatus.OK);
     }
 
@@ -171,17 +172,17 @@ public class PostulantController {
             @RequestParam(value = "keyword", required = false) String keyword
     ) {
         PostulantResponse postulants = postulantService.findPostulantsByUtilisateur(idEntretien,idUtilisateur, pageNo, pageSize, sortBy, sortDir, keyword);
-        if (postulants.getContenu().isEmpty()) {
-            return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
-        }
+        //if (postulants.getContenu().isEmpty()) {
+        //    return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
+        //}
         return new ResponseEntity<>(postulants, HttpStatus.OK);
     }
 
     @GetMapping("/nombreGenre/{idEntretien}/{genre}")
     public ResponseEntity<?> getNombre(@PathVariable  String genre,@PathVariable Long idEntretien){
-        if(entretienService.readEntretienByid(idEntretien)==null){
-            return new ResponseEntity<>("entretien non trouvé",HttpStatus.BAD_REQUEST);
-        }
+        //if(entretienService.readEntretienByid(idEntretien)==null){
+        //    return new ResponseEntity<>("entretien non trouvé",HttpStatus.BAD_REQUEST);
+        //}
         NombreResponse nombreResponse = postulantService.getNombre(genre,idEntretien);
         return new ResponseEntity<>(nombreResponse,HttpStatus.OK);
     }
