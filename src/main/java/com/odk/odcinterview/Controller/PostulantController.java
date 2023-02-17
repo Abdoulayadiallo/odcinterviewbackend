@@ -171,7 +171,23 @@ public class PostulantController {
             @RequestParam(value = "genre", required = false) String genre,
             @RequestParam(value = "keyword", required = false) String keyword
     ) {
-        PostulantResponse postulants = postulantService.findPostulantsByUtilisateur(idEntretien,idUtilisateur, pageNo, pageSize, sortBy, sortDir, keyword);
+        PostulantResponse postulants = postulantService.findPostulantsByUtilisateurAndEntretien(idEntretien,idUtilisateur, pageNo, pageSize, sortBy, sortDir, keyword);
+        //if (postulants.getContenu().isEmpty()) {
+        //    return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
+        //}
+        return new ResponseEntity<>(postulants, HttpStatus.OK);
+    }
+    @GetMapping("/list/utilisateur/{idUtilisateur}")
+    public ResponseEntity<?> getPostulantListByByUtilisateur(
+            @PathVariable Long idUtilisateur,
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
+            @RequestParam(value = "genre", required = false) String genre,
+            @RequestParam(value = "keyword", required = false) String keyword
+    ) {
+        PostulantResponse postulants = postulantService.findPostulantsByUtilisateur(idUtilisateur, pageNo, pageSize, sortBy, sortDir, keyword);
         //if (postulants.getContenu().isEmpty()) {
         //    return new ResponseEntity<>("Postulants non trouvés.", HttpStatus.OK);
         //}

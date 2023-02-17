@@ -79,7 +79,11 @@ public class ExcelHelper {
                             break;
 
                         case 4:
-                            postulant.setGenre(currentCell.getStringCellValue());
+                            try {
+                                postulant.setGenre(String.valueOf(currentCell.getNumericCellValue()));
+                            }catch (Exception e){
+                                postulant.setGenre(currentCell.getStringCellValue());
+                            }
                             break;
 
                         default:

@@ -121,7 +121,7 @@ public class PostulantServiceImpl implements PostulantService {
                 id[0] = id[0] +1;
                 LocalDate date = LocalDate.now();
                 Date date1= new Date();
-                String numeroMatricule = "ODCI"+ id[0]+date.getYear();
+                String numeroMatricule = "E"+idEntretien+"ODCI"+ id[0]+date.getYear();
                 postulant.setEntretien(entretien);
                 postulant.setNumeroMTCL(numeroMatricule);
                 postulant.setDateCreation(date1);
@@ -225,7 +225,7 @@ public class PostulantServiceImpl implements PostulantService {
     }
 
     @Override
-    public PostulantResponse findPostulantsByUtilisateur(Long idEntretien, Long idUtilisateur,int pageNo, int pageSize, String sortBy, String sortDir, String keyword) {
+    public PostulantResponse findPostulantsByUtilisateurAndEntretien(Long idEntretien, Long idUtilisateur,int pageNo, int pageSize, String sortBy, String sortDir, String keyword) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
@@ -247,4 +247,26 @@ public class PostulantServiceImpl implements PostulantService {
         postulantResponse.setKeyword(keyword);
         return postulantResponse;
     }
+
+    @Override
+    public PostulantResponse findPostulantsByUtilisateur(Long idUtilisateur, int pageNo, int pageSize, String sortBy, String sortDir, String keyword) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+        Page<Postulant> postulants;
+        if( keyword==null)
+            postulants = postulantRepository.findPostulantByUtilisateur(idUtilisateur,pageable);
+        else
+            postulants = postulantRepository.findPostulantByUtilisateurOrKeyword(idUtilisateur,keyword,pageable);
+
+        List<Postulant> postulants1 = postulants.getContent();
+        PostulantResponse postulantResponse = new PostulantResponse();
+        postulantResponse.setContenu(postulants1);
+        postulantResponse.setPageNo(postulants.getNumber());
+        postulantResponse.setPageSize(postulants.getSize());
+        postulantResponse.setTotalPages(postulants.getTotalPages());
+        postulantResponse.setTotalElements(postulants.getTotalElements());
+        postulantResponse.setLast(postulants.isLast());
+        postulantResponse.setKeyword(keyword);
+        return postulantResponse;    }
 }

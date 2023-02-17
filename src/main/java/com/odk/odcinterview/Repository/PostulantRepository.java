@@ -37,7 +37,12 @@ public interface PostulantRepository extends JpaRepository<Postulant, Long> {
     @Query(value = "SELECT DISTINCT postulant.* FROM postulant,utilisateur,entretien,note WHERE  (postulant.entretien_id=:x AND note.utilisateur_id=:idUtilisateur AND postulant.id=note.postulant_id) AND (postulant.email like %:keyword% OR postulant.decision_final like %:keyword% or postulant.genre like %:keyword% or postulant.nom like %:keyword% or postulant.prenom like %:keyword% or postulant.numero like %:keyword% or postulant.numeromtcl like %:keyword% or postulant.note_final like %:keyword% or postulant.rang like %:keyword% or postulant.date_creation like %:keyword%)", nativeQuery = true)
     Page<Postulant> findPostulantEntretienAndUtilisateurOrKeyword(@Param("x") Long id, @Param("idUtilisateur") Long idUtilisateur, @RequestParam(value = "keyword", required = false) String keyword, Pageable pageable);
 
+    @Query(value = "SELECT DISTINCT postulant.* FROM postulant,utilisateur,note WHERE  (note.utilisateur_id=:idUtilisateur AND postulant.id=note.postulant_id) AND (postulant.email like %:keyword% OR postulant.decision_final like %:keyword% or postulant.genre like %:keyword% or postulant.nom like %:keyword% or postulant.prenom like %:keyword% or postulant.numero like %:keyword% or postulant.numeromtcl like %:keyword% or postulant.note_final like %:keyword% or postulant.rang like %:keyword% or postulant.date_creation like %:keyword%)", nativeQuery = true)
+    Page<Postulant> findPostulantByUtilisateurOrKeyword(@Param("idUtilisateur") Long idUtilisateur, @RequestParam(value = "keyword", required = false) String keyword, Pageable pageable);
+
     @Query(value = "SELECT DISTINCT postulant.* FROM postulant,utilisateur,entretien,note WHERE note.utilisateur_id=:idUtilisateur AND postulant.id=note.postulant_id AND entretien.id =:x", nativeQuery = true)
     Page<Postulant> findPostulantEntretienAndUtilisateur(@Param("x") Long id, @Param("idUtilisateur") Long idUtilisateur, Pageable pageable);
+    @Query(value = "SELECT DISTINCT postulant.* FROM postulant,utilisateur,note WHERE note.utilisateur_id=:idUtilisateur AND postulant.id=note.postulant_id", nativeQuery = true)
+    Page<Postulant> findPostulantByUtilisateur(@Param("idUtilisateur") Long idUtilisateur, Pageable pageable);
 
 }

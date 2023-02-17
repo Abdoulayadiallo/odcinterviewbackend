@@ -30,7 +30,9 @@ public interface PostulantService {
     NombreResponse getNombre(String genre, Long idEntretien);
     NombreResponse getNombreAllPostulant(String genre);
 
-    PostulantResponse findPostulantsByUtilisateur(Long idEntretien, Long idUtilisateur,int pageNo, int pageSize, String sortBy, String sortDir, String keyword);
+    PostulantResponse findPostulantsByUtilisateurAndEntretien(Long idEntretien, Long idUtilisateur,int pageNo, int pageSize, String sortBy, String sortDir, String keyword);
+
+    PostulantResponse findPostulantsByUtilisateur(Long idUtilisateur,int pageNo, int pageSize, String sortBy, String sortDir, String keyword);
 
 
 
