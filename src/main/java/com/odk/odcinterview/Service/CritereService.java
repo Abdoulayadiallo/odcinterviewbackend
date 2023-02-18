@@ -12,4 +12,5 @@ public interface CritereService {
     Critere readCritereByid(Long id);
 
     Critere saveCritereSimple(Critere critere);
+    Boolean existCritereByNom(String nom);
 }

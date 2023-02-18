@@ -58,7 +58,7 @@ public class CritereController {
     
     @PostMapping("/add")
     public ResponseEntity<?> addCritereSimple(@RequestBody Critere critere) {
-        if (critereService.readCritereByid(critere.getId()) != null) {
+        if (critereService.existCritereByNom(critere.getCritereNom())) {
             return new ResponseEntity<>("ce critere existe deja.", HttpStatus.BAD_REQUEST);
         }
 
@@ -72,6 +72,10 @@ public class CritereController {
         if (critereService.readCritereByid(idCritere) == null) {
             return new ResponseEntity<>("cette critere n existe pas.", HttpStatus.BAD_REQUEST);
         }
+        if (critereService.readCritereByid(idCritere) == null) {
+            return new ResponseEntity<>("cette critere n existe pas.", HttpStatus.BAD_REQUEST);
+        }
+
         Critere critere1 = critereService.updateCritere(critere,idCritere);
         return new ResponseEntity<>(critere1, HttpStatus.OK);
     }
@@ -96,5 +100,6 @@ public class CritereController {
         }
         return new ResponseEntity<>(criteres, HttpStatus.OK);
     }
+
 
 }

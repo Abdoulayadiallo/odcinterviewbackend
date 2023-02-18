@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface CritereRepository extends JpaRepository<Critere,Long> {
     Critere findCritereById(Long id);
+    Boolean existsCritereByCritereNom(String nom);
 
     List<Critere> findCritereByEntretien(Entretien entretien);
 }

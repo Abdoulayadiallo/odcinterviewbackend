@@ -66,4 +66,9 @@ public class CritereServiceImpl implements CritereService {
     public Critere saveCritereSimple(Critere critere) {
         return critereRepository.save(critere);
     }
+
+    @Override
+    public Boolean existCritereByNom(String nom) {
+        return critereRepository.existsCritereByCritereNom(nom);
+    }
 }

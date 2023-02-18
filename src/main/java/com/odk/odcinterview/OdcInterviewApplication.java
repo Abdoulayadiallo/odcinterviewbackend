@@ -52,15 +52,6 @@ public class OdcInterviewApplication extends SpringBootServletInitializer {
         SpringApplication.run(OdcInterviewApplication.class, args);
     }
 
-    @Configuration
-    public class WebConfig implements WebMvcConfigurer {
-        @Override
-        public void addResourceHandlers(ResourceHandlerRegistry registry) {
-            registry.addResourceHandler("/**")
-                    .addResourceLocations("classpath:/static/","classpath:/image/")
-                    .setCachePeriod(0);
-        }
-    }
     @Bean
     CommandLineRunner start(AccountService accountService, EtatService etatService){
         return args -> {
