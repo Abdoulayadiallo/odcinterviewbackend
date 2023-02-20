@@ -48,7 +48,7 @@ public class QuestionController {
 
 
         if(questionService.existQuestionBynom(question.getQuestionNom())) {
-            return new ResponseEntity<>("cette question existe deja.", HttpStatus.OK);
+            return new ResponseEntity<>("cette question existe deja.", HttpStatus.BAD_REQUEST);
         }
         questionService.saveQuestion(question);
         return new ResponseEntity<>(question, HttpStatus.CREATED);

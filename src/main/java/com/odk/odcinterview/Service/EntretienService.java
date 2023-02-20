@@ -14,6 +14,6 @@ public interface EntretienService {
     EntretienResponse readEntretiens(int pageNo, int pageSize, String sortBy, String sortDir,String username,String nomEntretien);
     Entretien readEntretienByid(Long id);
 
-    String saveEntretienImage(MultipartFile multipartFile, String entretienImageNom);
+    String saveEntretienImage(MultipartFile multipartFile, Long idEntretien);
 
 }

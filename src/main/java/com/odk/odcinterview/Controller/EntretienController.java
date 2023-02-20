@@ -53,6 +53,12 @@ public class EntretienController {
 //        if(critere == null){
 //            return new ResponseEntity<>("Ce critere n existe pas",HttpStatus.NOT_FOUND);
 //        }
+        if(entretien.getDateDebut().after(entretien.getDateFin())){
+            return new ResponseEntity<>("La date debut ne peut pas etre superieur à la date de fin",HttpStatus.BAD_REQUEST);
+        }
+        if(entretien.getDateFin().before(entretien.getDateDebut())){
+            return new ResponseEntity<>("La date de fin ne peut pas etre inferieur à la date de debut",HttpStatus.BAD_REQUEST);
+        }
         if (entretienService.readEntretienByid(entretien.getId()) != null) {
             return new ResponseEntity<>("cet entretien existe deja.", HttpStatus.NOT_FOUND);
         }
@@ -64,6 +70,12 @@ public class EntretienController {
 
     @PutMapping("/update/{idEntretien}")
     public ResponseEntity<?> updateEntretien(@PathVariable Long idEntretien,@RequestBody Entretien entretien) {
+        if(entretien.getDateDebut().after(entretien.getDateFin())){
+            return new ResponseEntity<>("La date debut ne peut pas etre superieur à la date de fin",HttpStatus.BAD_REQUEST);
+        }
+        if(entretien.getDateFin().before(entretien.getDateDebut())){
+            return new ResponseEntity<>("La date de fin ne peut pas etre inferieur à la date de debut",HttpStatus.BAD_REQUEST);
+        }
         if (entretienService.readEntretienByid(idEntretien) == null) {
             return new ResponseEntity<>("cet entretien n existe pas.", HttpStatus.NOT_FOUND);
         }
@@ -99,14 +111,14 @@ public class EntretienController {
         return new ResponseEntity<>(entretiens, HttpStatus.OK);
     }
 
-    @PostMapping("/photo/upload/{entretienNom}")
-    public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile multipartFile,@PathVariable String entretienNom) {
+    @PostMapping("/photo/upload/{idEntretien}")
+    public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile multipartFile,@PathVariable Long idEntretien) {
        // Entretien entretien = entretienService.readEntretienByid(id);
        // if (entretien == null) {
         //    return new ResponseEntity<>("cet entretien n existe pas.", HttpStatus.NOT_FOUND);
         //}
         try {
-            entretienService.saveEntretienImage(multipartFile, entretienNom);
+            entretienService.saveEntretienImage(multipartFile, idEntretien);
             return new ResponseEntity<>("Entretien image enregistrer!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Entretien image non enregistrer", HttpStatus.BAD_REQUEST);

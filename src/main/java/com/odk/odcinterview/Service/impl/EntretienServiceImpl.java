@@ -156,12 +156,12 @@ public class EntretienServiceImpl implements EntretienService {
 
     }
     @Override
-    public String saveEntretienImage(MultipartFile multipartFile, String entretienImage) {
+    public String saveEntretienImage(MultipartFile multipartFile, Long idEntretien) {
         byte[] bytes;
         try {
-            Files.deleteIfExists(Paths.get(Constants.INTERVIEW_FOLDER + "/" + entretienImage + ".png"));
+            Files.deleteIfExists(Paths.get(Constants.INTERVIEW_FOLDER + "/" + idEntretien + ".png"));
             bytes = multipartFile.getBytes();
-            Path path = Paths.get(Constants.INTERVIEW_FOLDER + entretienImage + ".png");
+            Path path = Paths.get(Constants.INTERVIEW_FOLDER + idEntretien + ".png");
             Files.write(path, bytes);
             return "Interview picture saved to server";
         } catch (IOException e) {
