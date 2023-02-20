@@ -22,6 +22,6 @@ public class Critere {
     @OneToMany(mappedBy = "critere")
     @JsonIgnore
     private List<Question> question;
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.DETACH)
     private Entretien entretien;
 }

@@ -136,10 +136,9 @@ public class AccountController {
         return new ResponseEntity<String>("email envoyé!", HttpStatus.OK);
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity<String> deleteUser(@RequestBody HashMap<String, String> mapper) {
-        String username = mapper.get("username");
-        Utilisateur utilisateur = accountService.findByUsername(username);
+    @DeleteMapping("/delete/{idUser}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long idUser) {
+        Utilisateur utilisateur = accountService.findUserById(idUser);
         accountService.deleteUser(utilisateur);
         return new ResponseEntity<String>("Utilisateur supprimé avec succès!", HttpStatus.OK);
     }

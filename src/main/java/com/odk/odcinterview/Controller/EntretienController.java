@@ -54,7 +54,7 @@ public class EntretienController {
 //            return new ResponseEntity<>("Ce critere n existe pas",HttpStatus.NOT_FOUND);
 //        }
         if(entretien.getDateDebut().after(entretien.getDateFin())){
-            return new ResponseEntity<>("La date debut ne peut pas etre superieur à la date de fin",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("DateDebutSuperieurFin",HttpStatus.BAD_REQUEST);
         }
         if(entretien.getDateFin().before(entretien.getDateDebut())){
             return new ResponseEntity<>("La date de fin ne peut pas etre inferieur à la date de debut",HttpStatus.BAD_REQUEST);
