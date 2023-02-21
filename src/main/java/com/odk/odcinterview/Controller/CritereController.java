@@ -3,6 +3,8 @@ package com.odk.odcinterview.Controller;
 import com.odk.odcinterview.Model.Critere;
 import com.odk.odcinterview.Model.Entretien;
 import com.odk.odcinterview.Model.Question;
+import com.odk.odcinterview.Payload.CritereResponse;
+import com.odk.odcinterview.Payload.EntretienResponse;
 import com.odk.odcinterview.Repository.EntretienRepository;
 import com.odk.odcinterview.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,10 +88,10 @@ public class CritereController {
     public ResponseEntity<?> deleteCritere(@PathVariable Long idCritere) {
         Critere critere = critereService.readCritereByid(idCritere);
         if (critere == null) {
-            return new ResponseEntity<>("ce critere n existe pas.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("ceCritereNExistePas", HttpStatus.BAD_REQUEST);
         }
         critereService.deleteCritere(critere);
-        return new ResponseEntity<>("Critere a ete supprime avec succes", HttpStatus.OK);
+        return new ResponseEntity<>("critereAEteSupprimeAvecSucces", HttpStatus.OK);
     }
     //methode permettant de recuperer tous les criteres
     @GetMapping("/list")
@@ -100,6 +102,20 @@ public class CritereController {
         }
         return new ResponseEntity<>(criteres, HttpStatus.OK);
     }
-
+    @GetMapping("/entretien/{idEntretien}")
+    public ResponseEntity<?> getCritereById(
+            @PathVariable Long idEntretien,
+            @RequestParam(value = "pageNo" ,defaultValue = "0",required = false) int pageNo,
+            @RequestParam(value = "pageSize" ,defaultValue = "10",required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {
+        Entretien entretien = entretienService.readEntretienByid(idEntretien);
+        if (entretien == null){
+            return new ResponseEntity<>("Cet entretien n'existe pas.", HttpStatus.OK);
+        }
+        CritereResponse critereResponse = critereService.getCritereByEntretien(idEntretien,pageNo,pageSize,sortBy,sortDir);
+        return new ResponseEntity<>(critereResponse, HttpStatus.OK);
+    }
 
 }

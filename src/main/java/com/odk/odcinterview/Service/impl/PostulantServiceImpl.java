@@ -3,6 +3,7 @@ package com.odk.odcinterview.Service.impl;
 import com.odk.odcinterview.Model.*;
 import com.odk.odcinterview.Payload.NombreResponse;
 import com.odk.odcinterview.Payload.PostulantResponse;
+import com.odk.odcinterview.Repository.CritereRepository;
 import com.odk.odcinterview.Repository.EntretienRepository;
 import com.odk.odcinterview.Repository.PostulantRepository;
 import com.odk.odcinterview.Service.PostulantService;
@@ -27,7 +28,7 @@ public class PostulantServiceImpl implements PostulantService {
     private final EntretienRepository entretienRepository;
     private final JavaMailSender mailSender;
     private final EmailConstructor emailConstructor;
-
+    private final CritereRepository critereRepository;
 
 
     @Override
@@ -268,5 +269,18 @@ public class PostulantServiceImpl implements PostulantService {
         postulantResponse.setTotalElements(postulants.getTotalElements());
         postulantResponse.setLast(postulants.isLast());
         postulantResponse.setKeyword(keyword);
-        return postulantResponse;    }
+        return postulantResponse;
+
+    }
+
+    @Override
+    public boolean verifierPosulantEvaluer(Long idPostulant) {
+        Postulant postulant = postulantRepository.findPostulantById(idPostulant);
+        List<Critere> critere = critereRepository.findCritereByEntretien(postulant.getEntretien());
+        if(postulant.getNotes().size()==critere.size()){
+
+        }
+        return false;
+    }
+
 }

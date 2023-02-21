@@ -34,7 +34,7 @@ public interface PostulantService {
 
     PostulantResponse findPostulantsByUtilisateur(Long idUtilisateur,int pageNo, int pageSize, String sortBy, String sortDir, String keyword);
 
-
+    boolean verifierPosulantEvaluer(Long idPostulant);
 
 
 

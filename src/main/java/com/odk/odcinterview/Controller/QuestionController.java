@@ -1,8 +1,6 @@
 package com.odk.odcinterview.Controller;
 
-import com.odk.odcinterview.Model.Critere;
-import com.odk.odcinterview.Model.Postulant;
-import com.odk.odcinterview.Model.Question;
+import com.odk.odcinterview.Model.*;
 import com.odk.odcinterview.Model.Question;
 import com.odk.odcinterview.Payload.NombreQuestionResponse;
 import com.odk.odcinterview.Repository.QuestionRepository;
@@ -99,6 +97,14 @@ public class QuestionController {
         }
         NombreQuestionResponse nombreQuestionResponse = questionService.getNombreQuestionRepond(idPostulant);
         return  new ResponseEntity<>(nombreQuestionResponse,HttpStatus.OK);
+    }
+    @GetMapping("/entretien/{idEntretien}")
+    public ResponseEntity<?> getQuestionByEntretien(@PathVariable Long idEntretien) {
+        Entretien entretien = entretienService.readEntretienByid(idEntretien);
+        if (entretien == null) {
+            return new ResponseEntity<>("cet entretien n existe pas.", HttpStatus.NOT_FOUND);
+        }
+        return  new ResponseEntity<>(questionService.getQuestionByEntretien(idEntretien),HttpStatus.OK);
     }
 
 

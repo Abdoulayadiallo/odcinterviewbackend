@@ -70,6 +70,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public List<Question> getQuestionByEntretien(Long idEntretien) {
+        List<Question> questions= questionRepository.findQuestionByEntretien(idEntretien);
+        return questions;
+    }
+
+    @Override
     public NombreQuestionResponse getNombreQuestionRepond(Long idPostulant) {
         List<Note> note = noteRepository.CritereNoteByPostulant(idPostulant);
         NombreQuestionResponse nombreQuestionResponse = new NombreQuestionResponse();

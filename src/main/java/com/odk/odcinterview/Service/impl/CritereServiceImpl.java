@@ -3,10 +3,15 @@ package com.odk.odcinterview.Service.impl;
 import com.odk.odcinterview.Model.Critere;
 import com.odk.odcinterview.Model.Entretien;
 import com.odk.odcinterview.Model.Question;
+import com.odk.odcinterview.Payload.CritereResponse;
 import com.odk.odcinterview.Repository.CritereRepository;
 import com.odk.odcinterview.Repository.EntretienRepository;
 import com.odk.odcinterview.Repository.QuestionRepository;
 import com.odk.odcinterview.Service.CritereService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -70,5 +75,23 @@ public class CritereServiceImpl implements CritereService {
     @Override
     public Boolean existCritereByNom(String nom) {
         return critereRepository.existsCritereByCritereNom(nom);
+    }
+
+    @Override
+    public CritereResponse getCritereByEntretien(Long idEntretien, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Entretien entretien = entretienRepository.findEntretienById(idEntretien);
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        //Une Pageable pour parametre le nombre de page,le nombre d'element d'une page,le trie
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+        Page<Critere> criteres = critereRepository.findCritereByEntretien(entretien,pageable);
+        List<Critere> criteres1 = criteres.getContent();
+        CritereResponse critereResponse = new CritereResponse();
+        critereResponse.setContenu(criteres1);
+        critereResponse.setPageNo(criteres.getNumber());
+        critereResponse.setLast(criteres.isLast());
+        critereResponse.setTotalPages(criteres.getTotalPages());
+        critereResponse.setPageSize(criteres.getSize());
+        return critereResponse;
     }
 }
