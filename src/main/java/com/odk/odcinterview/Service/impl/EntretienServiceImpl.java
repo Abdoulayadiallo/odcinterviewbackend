@@ -114,7 +114,7 @@ public class EntretienServiceImpl implements EntretienService {
         return entretienRepository.findEntretienById(id);
     }
 
-    @Scheduled(fixedDelayString = "1000")
+    @Scheduled(fixedRate = 5000)
     public void etatEntretien(){
         List<Entretien> allEntretiens=entretienRepository.findAll();
 
