@@ -262,6 +262,31 @@ public class PostulantServiceImpl implements PostulantService {
             postulants = postulantRepository.findPostulantByUtilisateurOrKeyword(idUtilisateur,keyword,pageable);
 
         List<Postulant> postulants1 = postulants.getContent();
+
+        for (Postulant postulant : postulants1) {
+            int total = 0;
+            int baremTotal = 0;
+            List<Note> notes = postulant.getNotes();
+            for (Note note : notes) {
+                total += note.getPoint() * note.getCritere().getBarem();
+                System.out.println(total + "Total");
+                baremTotal += note.getCritere().getBarem();
+                System.out.println(baremTotal + "baremtotal");
+            }
+            if(baremTotal!=0){
+            double noteFinale = total / baremTotal *1f;
+            postulant.setNoteFinal(noteFinale);
+            }
+
+        }
+
+        postulants1.sort(Comparator.comparingDouble(Postulant::getNoteFinal).reversed());
+
+        int rang = 1;
+        for (Postulant postulant : postulants1) {
+            postulant.setRang(rang++);
+        }
+
         PostulantResponse postulantResponse = new PostulantResponse();
         postulantResponse.setContenu(postulants1);
         postulantResponse.setPageNo(postulants.getNumber());
@@ -275,18 +300,22 @@ public class PostulantServiceImpl implements PostulantService {
         List<Postulant> postulants = entretien.getPostulants();
 
         for (Postulant postulant : postulants) {
-            int total = 0;
-            int baremTotal = 0;
+            double total = 0;
+            double baremTotal = 0;
             List<Note> notes = postulant.getNotes();
             for (Note note : notes) {
                 total += note.getPoint() * note.getCritere().getBarem();
+                System.out.println(total + "Total");
                 baremTotal += note.getCritere().getBarem();
+                System.out.println(baremTotal + "baremtotal");
             }
-            int noteFinale = total / baremTotal;
-            postulant.setNoteFinal(noteFinale);
+            if(baremTotal!=0){
+                double noteFinale = total / baremTotal;
+                postulant.setNoteFinal(noteFinale);
+            }
         }
 
-        postulants.sort(Comparator.comparingInt(Postulant::getNoteFinal).reversed());
+        postulants.sort(Comparator.comparingDouble(Postulant::getNoteFinal).reversed());
 
         int rang = 1;
         for (Postulant postulant : postulants) {

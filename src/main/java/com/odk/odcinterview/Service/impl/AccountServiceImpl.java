@@ -44,7 +44,7 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private EntretienRepository entretienRepository;
 
-    public Utilisateur saveUser(String nom, String prenom, String email, String numero, String genre,Long idEntretien) {
+    public Utilisateur saveUser(String nom, String prenom, String email, String numero, String genre, Long idEntretien) {
         Entretien entretien = entretienRepository.findEntretienById(idEntretien);
         LocalDate date = LocalDate.now();
         String password = nom.substring(0, 1) + prenom.substring(0, 1) + "@ODC" + date.getYear();
@@ -53,7 +53,22 @@ public class AccountServiceImpl implements AccountService {
         utilisateur.setPassword(encryptedPassword);
         utilisateur.setNom(nom);
         utilisateur.setPrenom(prenom);
+        // declaration d'une liste pour les nom utilisateur existant
+        //List<String> existingUsernames = new ArrayList<String>();
+        // initialisation de la valeur
+        //int sequence=1;
         String username = nom.substring(0, 1) + prenom.substring(0, 1) + nom;
+        List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
+
+        if (utilisateurs.contains(utilisateurRepository.findByUsername(username))) {
+            int sequenceNum = 1;
+            String newUsername = username + sequenceNum;
+            while (utilisateurs.contains(utilisateurRepository.findByUsername(newUsername))) {
+                sequenceNum++;
+                newUsername = username + sequenceNum;
+            }
+            username = newUsername;
+        }
         utilisateur.setUsername(username);
         utilisateur.setEmail(email);
         utilisateur.setGenre(genre);
@@ -77,6 +92,7 @@ public class AccountServiceImpl implements AccountService {
         mailSender.send(emailConstructor.constructNewUserEmail(utilisateur, password));
         return utilisateur;
     }
+
     public Utilisateur saveAdmin(Utilisateur utilisateur) {
         Role role = roleRepository.findByRoleName(Erole.ADMIN);
         utilisateur.setUsername("ADMIN");
@@ -132,7 +148,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void deleteUser(Utilisateur utilisateur) {
-        utilisateurRepository.delete(utilisateur);
+        try {
+            Files.deleteIfExists(Paths.get(Constants.USER_FOLDER + "/" + utilisateur.getId() + ".png"));
+            utilisateurRepository.delete(utilisateur);
+        } catch (Exception e) {
+        }
     }
 
     @Override
@@ -165,12 +185,12 @@ public class AccountServiceImpl implements AccountService {
         Role juryrole = roleRepository.findByRoleName(Erole.JURY);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Utilisateur> utilisateurs;
-        if( keyword == null)
-            utilisateurs = utilisateurRepository.findUtilisteurByRole(juryrole,pageable);
+        if (keyword == null)
+            utilisateurs = utilisateurRepository.findUtilisteurByRole(juryrole, pageable);
         else
-            utilisateurs = utilisateurRepository.findAllJUryByKeyword(keyword,pageable);
+            utilisateurs = utilisateurRepository.findAllJUryByKeyword(keyword, pageable);
         List<Utilisateur> jurylist = utilisateurs.getContent();
         JuryResponse juryResponse = new JuryResponse();
         juryResponse.setContenu(jurylist);
@@ -184,15 +204,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public JuryResponse juryListByEntretien(Long idEntretien,int pageNo, int pageSize, String sortBy, String sortDir, String keyword) {
+    public JuryResponse juryListByEntretien(Long idEntretien, int pageNo, int pageSize, String sortBy, String sortDir, String keyword) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Utilisateur> utilisateurs;
-        if( keyword == null)
-            utilisateurs = utilisateurRepository.findUtilisateurByEntretien(idEntretien,pageable);
+        if (keyword == null)
+            utilisateurs = utilisateurRepository.findUtilisateurByEntretien(idEntretien, pageable);
         else
-            utilisateurs = utilisateurRepository.findUtilisateurEntretien0rByKeyword(idEntretien,keyword,pageable);
+            utilisateurs = utilisateurRepository.findUtilisateurEntretien0rByKeyword(idEntretien, keyword, pageable);
 
         List<Utilisateur> jurylist = utilisateurs.getContent();
         JuryResponse juryResponse = new JuryResponse();
