@@ -1,11 +1,13 @@
 package com.odk.odcinterview.Service;
 
+import com.odk.odcinterview.Model.Entretien;
 import com.odk.odcinterview.Model.Postulant;
 import com.odk.odcinterview.Payload.NombreResponse;
 import com.odk.odcinterview.Payload.PostulantResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 
 public interface PostulantService {
     Postulant savePostulant(Postulant postulant, Long idEntretien);
@@ -35,7 +37,7 @@ public interface PostulantService {
     PostulantResponse findPostulantsByUtilisateur(Long idUtilisateur,int pageNo, int pageSize, String sortBy, String sortDir, String keyword);
 
 
-
+    List<Postulant> trierPostulantsParNote(Entretien entretien);
 
 
 }

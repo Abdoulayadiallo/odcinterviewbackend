@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -269,4 +270,28 @@ public class PostulantServiceImpl implements PostulantService {
         postulantResponse.setLast(postulants.isLast());
         postulantResponse.setKeyword(keyword);
         return postulantResponse;    }
+    public List<Postulant> trierPostulantsParNote(Entretien entretien) {
+        List<Postulant> postulants = entretien.getPostulants();
+
+        for (Postulant postulant : postulants) {
+            int total = 0;
+            int baremTotal = 0;
+            List<Note> notes = postulant.getNotes();
+            for (Note note : notes) {
+                total += note.getPoint() * note.getCritere().getBarem();
+                baremTotal += note.getCritere().getBarem();
+            }
+            int noteFinale = total / baremTotal;
+            postulant.setNoteFinal(noteFinale);
+        }
+
+        postulants.sort(Comparator.comparingInt(Postulant::getNoteFinal).reversed());
+
+        int rang = 1;
+        for (Postulant postulant : postulants) {
+            postulant.setRang(rang++);
+        }
+
+        return postulants;
+    }
 }

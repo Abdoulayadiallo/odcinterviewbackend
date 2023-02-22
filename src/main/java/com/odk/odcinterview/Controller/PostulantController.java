@@ -207,5 +207,12 @@ public class PostulantController {
         NombreResponse nombreResponse = postulantService.getNombreAllPostulant(genre);
         return new ResponseEntity<>(nombreResponse,HttpStatus.OK);
     }
+    @GetMapping("/ent/{id}")
+    public ResponseEntity<?> trierPostulantsParNote(@PathVariable Long id){
+        Entretien entretien = entretienService.readEntretienByid(id);
+        List<Postulant> postulants = postulantService.trierPostulantsParNote(entretien);
+        return new ResponseEntity<>(postulants,HttpStatus.OK);
+    }
+
 
 }
