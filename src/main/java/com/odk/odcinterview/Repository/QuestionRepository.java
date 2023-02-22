@@ -21,4 +21,6 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     Boolean existsQuestionByQuestionNom(String string);
 
     List<Question> findQuestionByCritere(Critere critere);
+    @Query(value = "SELECT DISTINCT question.* FROM question,critere WHERE critere.entretien_id=:idEntretien AND question.critere_id=critere.id",nativeQuery = true)
+    List<Question> findQuestionByEntretien(Long idEntretien);
 }

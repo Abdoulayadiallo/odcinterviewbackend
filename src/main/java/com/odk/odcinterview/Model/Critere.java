@@ -19,7 +19,7 @@ public class Critere {
     private String critereNom;
     private int barem;
     private boolean elimination;
-    @OneToMany(mappedBy = "critere")
+    @OneToMany(mappedBy = "critere",cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Question> question;
     @ManyToOne(cascade = CascadeType.DETACH)

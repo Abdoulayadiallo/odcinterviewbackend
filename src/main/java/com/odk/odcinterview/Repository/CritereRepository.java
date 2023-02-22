@@ -2,6 +2,9 @@ package com.odk.odcinterview.Repository;
 
 import com.odk.odcinterview.Model.Critere;
 import com.odk.odcinterview.Model.Entretien;
+import com.odk.odcinterview.Payload.CritereResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +17,6 @@ public interface CritereRepository extends JpaRepository<Critere,Long> {
     Boolean existsCritereByCritereNom(String nom);
 
     List<Critere> findCritereByEntretien(Entretien entretien);
+
+    Page<Critere> findCritereByEntretien(Entretien entretien, Pageable pageable);
 }

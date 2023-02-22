@@ -38,6 +38,8 @@ public interface PostulantService {
 
 
     List<Postulant> trierPostulantsParNote(Entretien entretien);
+    boolean verifierPosulantEvaluer(Long idPostulant);
+
 
 
 }

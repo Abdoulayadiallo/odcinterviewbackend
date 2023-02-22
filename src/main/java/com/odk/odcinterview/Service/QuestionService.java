@@ -15,6 +15,7 @@ public interface QuestionService {
     boolean existQuestionBynom(String nom);
 
     List<Question> getQuestionByCritere(Long idCritere);
+    List<Question> getQuestionByEntretien(Long idEntretien);
 
     NombreQuestionResponse getNombreQuestionRepond(Long idPostulant);
 }
