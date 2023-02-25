@@ -2,10 +2,7 @@ package com.odk.odcinterview.Service.impl;
 
 import com.odk.odcinterview.Model.*;
 import com.odk.odcinterview.Payload.NoteResponse;
-import com.odk.odcinterview.Repository.CritereRepository;
-import com.odk.odcinterview.Repository.NoteRepository;
-import com.odk.odcinterview.Repository.PostulantRepository;
-import com.odk.odcinterview.Repository.UtilisateurRepository;
+import com.odk.odcinterview.Repository.*;
 import com.odk.odcinterview.Service.NoteService;
 import lombok.AllArgsConstructor;
 import org.aspectj.weaver.NewConstructorTypeMunger;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -22,6 +20,7 @@ public class NoteServiceImpl implements NoteService {
     private final CritereRepository critereRepository;
     private final UtilisateurRepository utilisateurRepository;
     private final PostulantRepository postulantRepository;
+    private final EntretienRepository entretienRepository;
 
 
     @Override
@@ -33,11 +32,36 @@ public class NoteServiceImpl implements NoteService {
         if (critere.isElimination() == true && note.getPoint()<critere.getBarem()/2f) {
             postulant.setDecisionFinal(DesisionFinal.Refuser);
         }
-        postulant.setNoteFinal(postulant.getNoteFinal()+note.getPoint());
+        postulant.setNoteFinal(postulant.getNoteFinal()+note.getPoint()*critere.getBarem());
         Utilisateur utilisateur = utilisateurRepository.findByUsername(Jury);
         note.setCritere(critere);
         note.setUtilisateur(utilisateur);
         note.setPostulant(postulant);
+
+        List<Postulant> postulants = entretienRepository.findEntretienByPostulants(postulant).getPostulants();
+        for (Postulant postulant1 : postulants) {
+            double total = 0;
+            double baremTotal = 0;
+            List<Note> notes = postulant1.getNotes();
+            for (Note note1 : notes) {
+                total += note1.getPoint() * note1.getCritere().getBarem();
+                System.out.println(total + "Total");
+                baremTotal += note1.getCritere().getBarem();
+                System.out.println(baremTotal + "baremtotal");
+            }
+            if(baremTotal!=0){
+                double noteFinale = total / baremTotal;
+                postulant1.setNoteFinal(noteFinale);
+            }
+        }
+
+        postulants.sort(Comparator.comparingDouble(Postulant::getNoteFinal).reversed());
+
+        int rang = 1;
+        for (Postulant postulant1 : postulants) {
+            postulant1.setRang(rang++);
+        }
+        postulantRepository.saveAll(postulants);
         return noteRepository.save(note);
     }
 
