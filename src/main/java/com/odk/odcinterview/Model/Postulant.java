@@ -22,7 +22,7 @@ public class Postulant {
     private String genre;
     private String numeroMTCL;
     private String resultatFinal;
-    private Double noteFinal;
+    private Double noteFinal = 0d;
     private int rang;
     @Enumerated(EnumType.STRING)
     private DesisionFinal decisionFinal;

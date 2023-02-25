@@ -32,6 +32,7 @@ public class NoteServiceImpl implements NoteService {
         if (critere.isElimination() == true && note.getPoint()<critere.getBarem()/2f) {
             postulant.setDecisionFinal(DesisionFinal.Refuser);
         }
+
         postulant.setNoteFinal(postulant.getNoteFinal()+note.getPoint()*critere.getBarem());
         Utilisateur utilisateur = utilisateurRepository.findByUsername(Jury);
         note.setCritere(critere);
@@ -54,6 +55,7 @@ public class NoteServiceImpl implements NoteService {
                 postulant1.setNoteFinal(noteFinale);
             }
         }
+        Note note1= noteRepository.save(note);
 
         postulants.sort(Comparator.comparingDouble(Postulant::getNoteFinal).reversed());
 
@@ -62,7 +64,7 @@ public class NoteServiceImpl implements NoteService {
             postulant1.setRang(rang++);
         }
         postulantRepository.saveAll(postulants);
-        return noteRepository.save(note);
+        return note1;
     }
 
     @Override
