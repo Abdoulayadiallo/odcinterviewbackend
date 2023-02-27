@@ -59,7 +59,18 @@ public class PostulantController {
         Entretien entretien = entretienService.readEntretienByid(idEntretien);
         Date date = new Date();
         String filename = "postulant_de_"+entretien.getEntretienNom()+ date.toString() + ".xlsx";
-        InputStreamResource file = new InputStreamResource(postulantService.ExportPostulant(idEntretien));
+        InputStreamResource file = new InputStreamResource(postulantService.ExportPostulantByEntretien(idEntretien));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(file);
+    }
+    @GetMapping("/download")
+    public ResponseEntity<Resource> getFilePostulantAll() {
+        Date date = new Date();
+        String filename = "tous_postulants.xlsx";
+        InputStreamResource file = new InputStreamResource(postulantService.ExportPostulant());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
@@ -110,22 +121,31 @@ public class PostulantController {
     }
 
     @PostMapping("/accepter/{idPostulant}")
-    public ResponseEntity<?> accepterPostulant(@PathVariable Long idPostulant) {
-        Postulant postulant = postulantService.validerPostulant(idPostulant);
+    public ResponseEntity<?> accepterPostulant(@PathVariable Long idPostulant,@RequestBody String commentaireFinal) {
+        Postulant postulant = postulantService.readPostulantByid(idPostulant);
         if (postulant == null) {
             return new ResponseEntity<>("Ce Postulant n existe pas.", HttpStatus.NOT_FOUND);
         }
-        postulantService.deletePostulant(postulant);
+        postulantService.validerPostulant(idPostulant,commentaireFinal);
         return new ResponseEntity<>("Postulant a ete accepter", HttpStatus.OK);
     }
-    @DeleteMapping("/refuser/{idPostulant}")
-    public ResponseEntity<?> refuserPostulant(@PathVariable Long idPostulant) {
-        Postulant postulant = postulantService.refuserPostulant(idPostulant);
+    @PostMapping("/refuser/{idPostulant}")
+    public ResponseEntity<?> refuserPostulant(@PathVariable Long idPostulant,@RequestBody String commentaireFinal) {
+        Postulant postulant = postulantService.readPostulantByid(idPostulant);
         if (postulant == null) {
             return new ResponseEntity<>("Ce Postulant n existe pas.", HttpStatus.NOT_FOUND);
         }
-        postulantService.deletePostulant(postulant);
+        postulantService.refuserPostulant(idPostulant,commentaireFinal);
         return new ResponseEntity<>("Postulant a ete refuser", HttpStatus.OK);
+    }
+    @PostMapping("/enattente/{idPostulant}")
+    public ResponseEntity<?> enAttentePostulant(@PathVariable Long idPostulant,@RequestBody String commentaireFinal) {
+        Postulant postulant = postulantService.readPostulantByid(idPostulant);
+        if (postulant == null) {
+            return new ResponseEntity<>("Ce Postulant n existe pas.", HttpStatus.NOT_FOUND);
+        }
+        postulantService.enattentePostulant(idPostulant,commentaireFinal);
+        return new ResponseEntity<>("Postulant a ete mis à la liste d'attente", HttpStatus.OK);
     }
 
     @GetMapping("/list")

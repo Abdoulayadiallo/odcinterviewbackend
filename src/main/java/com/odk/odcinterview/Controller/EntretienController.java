@@ -3,6 +3,7 @@ package com.odk.odcinterview.Controller;
 import com.odk.odcinterview.Model.*;
 import com.odk.odcinterview.Payload.EntretienResponse;
 import com.odk.odcinterview.Payload.PostulantResponse;
+import com.odk.odcinterview.Repository.EtatRepository;
 import com.odk.odcinterview.Service.*;
 import com.odk.odcinterview.util.ExcelHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class EntretienController {
     NoteService noteServicee;
     @Autowired
     PostulantService postulantService;
+    @Autowired
+    private EtatRepository etatRepository;
 
     //methode permettant de recuperer un entretien
 
@@ -124,6 +127,14 @@ public class EntretienController {
             return new ResponseEntity<>("Entretien image non enregistrer", HttpStatus.BAD_REQUEST);
         }
     }
-
+    @GetMapping("/etat/{status}")
+    public ResponseEntity<?> GetEntretienBystatus(@PathVariable String status){
+        Etat etat = etatRepository.findByStatus(status);
+        if(etat==null){
+            return new ResponseEntity<>("Etat n'existe pas!", HttpStatus.BAD_REQUEST);
+        }
+        List<Entretien> entretiens = entretienService.GetEntretienBYStatus(status);
+        return new ResponseEntity<>(entretiens, HttpStatus.OK);
+    }
 
 }

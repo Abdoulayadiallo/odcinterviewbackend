@@ -1,6 +1,7 @@
 package com.odk.odcinterview.Repository;
 
 import com.odk.odcinterview.Model.Entretien;
+import com.odk.odcinterview.Model.Etat;
 import com.odk.odcinterview.Model.Postulant;
 import com.odk.odcinterview.Model.Utilisateur;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @Repository
 public interface EntretienRepository extends JpaRepository<Entretien,Long> {
     Entretien findEntretienById(Long id);
+    List<Entretien> findEntretiensByEtat(Etat etat);
     Page<Entretien> findEntretiensByUtilisateurs(Utilisateur utilisateur, Pageable pageable);
     Page<Entretien> findEntretiensByEntretienNomContaining(String nomentretien, Pageable pageable);
 

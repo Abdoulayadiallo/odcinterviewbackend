@@ -53,6 +53,7 @@ public class AccountServiceImpl implements AccountService {
         utilisateur.setPassword(encryptedPassword);
         utilisateur.setNom(nom);
         utilisateur.setPrenom(prenom);
+        utilisateur.setNumero(numero);
         // declaration d'une liste pour les nom utilisateur existant
         //List<String> existingUsernames = new ArrayList<String>();
         // initialisation de la valeur

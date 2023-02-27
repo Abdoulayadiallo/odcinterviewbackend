@@ -136,24 +136,38 @@ public class PostulantServiceImpl implements PostulantService {
     }
 
     @Override
-    public ByteArrayInputStream ExportPostulant(Long idEntretien) {
+    public ByteArrayInputStream ExportPostulantByEntretien(Long idEntretien) {
         Entretien entretien = entretienRepository.findEntretienById(idEntretien);
         List<Postulant> postulants = postulantRepository.findPostulantByEntretien(entretien);
+        ByteArrayInputStream inputStream = ExcelHelper.postulantsToExcel(postulants);
+        return inputStream;    }
+
+    @Override
+    public ByteArrayInputStream ExportPostulant() {
+        List<Postulant> postulants = postulantRepository.findAll();
         ByteArrayInputStream inputStream = ExcelHelper.postulantsToExcel(postulants);
         return inputStream;
     }
 
     @Override
-    public Postulant validerPostulant(Long idPostulant) {
+    public Postulant validerPostulant(Long idPostulant,String commentaireFinal) {
         Postulant postulant = postulantRepository.findPostulantById(idPostulant);
         postulant.setDecisionFinal(DesisionFinal.Accepter);
+        postulant.setCommentaireFinal(commentaireFinal);
         return postulantRepository.save(postulant);
     }
 
     @Override
-    public Postulant refuserPostulant(Long idPostulant) {
+    public Postulant refuserPostulant(Long idPostulant,String commentaireFinal) {
         Postulant postulant = postulantRepository.findPostulantById(idPostulant);
         postulant.setDecisionFinal(DesisionFinal.Refuser);
+        postulant.setCommentaireFinal(commentaireFinal);
+        return postulantRepository.save(postulant);    }
+    @Override
+    public Postulant enattentePostulant(Long idPostulant,String commentaireFinal) {
+        Postulant postulant = postulantRepository.findPostulantById(idPostulant);
+        postulant.setDecisionFinal(DesisionFinal.peutEtre);
+        postulant.setCommentaireFinal(commentaireFinal);
         return postulantRepository.save(postulant);    }
 
     @Override
@@ -263,7 +277,7 @@ public class PostulantServiceImpl implements PostulantService {
 
         List<Postulant> postulants1 = postulants.getContent();
 
-        for (Postulant postulant : postulants1) {
+/*        for (Postulant postulant : postulants1) {
             int total = 0;
             int baremTotal = 0;
             List<Note> notes = postulant.getNotes();
@@ -285,7 +299,7 @@ public class PostulantServiceImpl implements PostulantService {
         int rang = 1;
         for (Postulant postulant : postulants1) {
             postulant.setRang(rang++);
-        }
+        }*/
 
         PostulantResponse postulantResponse = new PostulantResponse();
         postulantResponse.setContenu(postulants1);

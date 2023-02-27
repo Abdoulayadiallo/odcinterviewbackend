@@ -16,4 +16,5 @@ public interface EntretienService {
 
     String saveEntretienImage(MultipartFile multipartFile, Long idEntretien);
 
+    List<Entretien> GetEntretienBYStatus(String status);
 }

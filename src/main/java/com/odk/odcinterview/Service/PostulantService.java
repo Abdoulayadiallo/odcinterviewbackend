@@ -20,11 +20,13 @@ public interface PostulantService {
 
     void ImportPostulant(MultipartFile multipartFile,Long idEntretien);
 
-    ByteArrayInputStream ExportPostulant(Long idEntretien);
+    ByteArrayInputStream ExportPostulantByEntretien(Long idEntretien);
+    ByteArrayInputStream ExportPostulant();
 
-    Postulant validerPostulant(Long idPostulant);
+    Postulant validerPostulant(Long idPostulant,String commentaireFinal);
 
-    Postulant refuserPostulant(Long idPostulant);
+    Postulant refuserPostulant(Long idPostulant,String commentaireFinal);
+    Postulant enattentePostulant(Long idPostulant,String commentaireFinal);
     boolean existsPostulantByEmail(String email);
 
   //  PostulantResponse getPostulantByEntretien(Long idEntretien,int pageNo, int pageSize,String sortBy, String sortDir);

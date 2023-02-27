@@ -169,4 +169,11 @@ public class EntretienServiceImpl implements EntretienService {
         }
     }
 
+    @Override
+    public List<Entretien> GetEntretienBYStatus(String status) {
+        Etat etat = etatRepository.findByStatus(status);
+        List<Entretien> entretiens = entretienRepository.findEntretiensByEtat(etat);
+        return entretiens;
+    }
+
 }
