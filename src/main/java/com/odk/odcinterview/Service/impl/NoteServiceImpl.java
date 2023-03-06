@@ -1,9 +1,11 @@
 package com.odk.odcinterview.Service.impl;
 
 import com.odk.odcinterview.Model.*;
+import com.odk.odcinterview.Payload.NombreQuestionResponse;
 import com.odk.odcinterview.Payload.NoteResponse;
 import com.odk.odcinterview.Repository.*;
 import com.odk.odcinterview.Service.NoteService;
+import com.odk.odcinterview.Service.QuestionService;
 import lombok.AllArgsConstructor;
 import org.aspectj.weaver.NewConstructorTypeMunger;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class NoteServiceImpl implements NoteService {
     private final PostulantRepository postulantRepository;
     private final EntretienRepository entretienRepository;
 
+    private final QuestionService questionService;
+
 
     @Override
     public Note saveNote(Note note, Long critereId, Long postulantId, String Jury) {
@@ -38,6 +42,12 @@ public class NoteServiceImpl implements NoteService {
         note.setCritere(critere);
         note.setUtilisateur(utilisateur);
         note.setPostulant(postulant);
+        noteRepository.save(note);
+
+        NombreQuestionResponse nombreQuestionResponse = questionService.getNombreQuestionRepond(postulantId);
+        if(nombreQuestionResponse.getPourcentage()==100){
+            postulant.setEvaluated(true);
+        }
 
         List<Postulant> postulants = entretienRepository.findEntretienByPostulants(postulant).getPostulants();
         for (Postulant postulant1 : postulants) {
@@ -50,8 +60,8 @@ public class NoteServiceImpl implements NoteService {
                 baremTotal += note1.getCritere().getBarem();
                 System.out.println(baremTotal + "baremtotal");
             }
-            if(baremTotal!=0){
-                double noteFinale = total / baremTotal;
+            if(baremTotal!=0d){
+                double noteFinale = total / baremTotal * 10d;
                 postulant1.setNoteFinal(noteFinale);
             }
         }

@@ -16,6 +16,8 @@ public class PostulantResponse {
     private int pageSize;
     private long totalElements;
     private int totalPages;
+    private int totalInterviewed;
+    private int totalNonInterviewed;
     private boolean last;
     private String genre;
     private String Keyword;

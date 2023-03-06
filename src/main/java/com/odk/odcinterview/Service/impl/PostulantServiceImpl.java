@@ -106,6 +106,8 @@ public class PostulantServiceImpl implements PostulantService {
         postulantResponse.setLast(postulants.isLast());
         postulantResponse.setGenre(genre);
         postulantResponse.setKeyword(keyword);
+        postulantResponse.setTotalInterviewed(postulantRepository.countPostulantByEntretienAndAndIsEvaluatedTrue(entretien));
+        postulantResponse.setTotalNonInterviewed(postulantRepository.countPostulantByEntretienAndAndIsEvaluatedFalse(entretien));
         return postulantResponse;    }
 
     @Override

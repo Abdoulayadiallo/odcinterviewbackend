@@ -28,6 +28,7 @@ public class Postulant {
     private DesisionFinal decisionFinal;
     private String commentaireFinal;
     private Date dateCreation;
+    private boolean isEvaluated;
     @OneToMany(mappedBy = "postulant" ,cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Note> notes;
